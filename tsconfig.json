@@ -12,6 +12,6 @@
     "moduleResolution": "node",
     "module": "commonjs"
   },
-  "include": ["./src", "./webpack.config.js", "index.d.ts"],
+  "include": ["./src", "./webpack.config.js", "index.d.ts", "postcss.config.js", "babel.config.js"],
   "exclude": ["node_modules"]
 }

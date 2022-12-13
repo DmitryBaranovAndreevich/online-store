@@ -4,4 +4,4 @@ function print(str: string): string {
   return str;
 }
 
-console.log(print("test"));
+console.log(print("test1"));
