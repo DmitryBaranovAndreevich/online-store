@@ -5,11 +5,14 @@ const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const EslingPlugin = require("eslint-webpack-plugin");
 
 module.exports = {
-  entry: { main: "./src/components/index.ts" },
+  entry: {
+    e: "./src/pages/index.ts",
+    main: "./src/pages/home.ts",
+    test: "./src/pages/test.ts",
+  },
   output: {
     path: path.resolve(__dirname, "dist"),
-    filename: "main.js",
-    publicPath: "",
+    filename: "[name].js",
   },
   mode: "development",
   devServer: {
@@ -35,24 +38,21 @@ module.exports = {
       },
       {
         test: /\.(png|svg|jpg|gif|woff(2)?|eot|ttf|otf)$/,
-        type: "asset/resource",
+        loader: "file-loader",
+        options: {
+          name: "[name].[ext]",
+        },
       },
       {
         test: /\.css$/,
-        use: [
-          MiniCssExtractPlugin.loader,
-          {
-            loader: "css-loader",
-            options: { importLoaders: 1 }, // подключаем директиву @import
-          },
-          "postcss-loader",
-        ],
+        use: ["style-loader", "css-loader", "postcss-loader"],
       },
     ],
   },
   plugins: [
     new HtmlWebpackPlugin({
       template: "./src/index.html",
+      filename: `index.html`,
     }),
     new CleanWebpackPlugin(),
     new MiniCssExtractPlugin(),

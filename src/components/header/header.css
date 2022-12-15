@@ -1,0 +1,11 @@
+.header {
+  max-width: 1400px;
+  margin: 10px auto;
+  display: flex;
+  justify-content: space-between;
+}
+
+.header__buttons-container {
+  display: flex;
+  gap: 20px;
+}
