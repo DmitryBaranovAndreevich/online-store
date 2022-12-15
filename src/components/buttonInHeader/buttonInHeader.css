@@ -1,0 +1,40 @@
+:root {
+  --url: url("../../images/basket.png");
+  --count: 0;
+}
+
+.header__button {
+  transition: .5s;
+}
+
+.header__button:hover {
+  cursor: pointer;
+  opacity: .7;
+}
+
+.header__button-title {
+  margin: 5px 0 0 0;
+}
+
+.header__button-icon {
+  position: relative;
+  width: 50px;
+  height: 40px;
+  background: var(--url) no-repeat center/30px 30px;
+}
+
+.header__number {
+  position: absolute;
+  display: flex;
+  margin: 0;
+  justify-content: center;
+  align-items: center;
+  font-size: 14px;
+  color: #FFF;
+  top: 0;
+  right: 0;
+  width: 25px;
+  height: 25px;
+  border-radius: 50%;
+  background-color: #2CB708;
+}
