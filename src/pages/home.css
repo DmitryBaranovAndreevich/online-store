@@ -1,0 +1,16 @@
+:root {
+  --max-width: 1320px;
+}
+
+.home__diskountBanner {
+  display: block;
+  margin: 20px auto;
+  max-width: var(--max-width);
+  width: 100%;
+}
+
+.home__main-content {
+  margin: 20px auto;
+  max-width: var(--max-width);
+  width: 100%;
+}
