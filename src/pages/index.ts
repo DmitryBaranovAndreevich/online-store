@@ -1,13 +1,11 @@
-import "../vender/normalize.css";
 import Router from "../service/router";
 
-console.log("tets");
 window.location.href = "/main";
 Router.modules
   .Home()
-  .then(() => console.log("y"))
+  .then(() => console.log("Hу"))
   .catch((e) => console.log(e));
 Router.modules
   .Test()
-  .then(() => console.log("y"))
+  .then(() => console.log("Hi"))
   .catch((e) => console.log(e));

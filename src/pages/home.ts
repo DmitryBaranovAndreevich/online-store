@@ -4,13 +4,12 @@ import { ImageLink } from "../components/imageLink/imageLink";
 import { IPage } from "../interface/iPage";
 import { Filters } from "../components/filters/filters";
 import diskountBanerImage from "../images/discountsBaner.jpg";
-import { createElement } from "../service";
+import { createElement, goods, brands, categories } from "../service";
+import { GoodList } from "../components/goodsList/goodsList";
 
 const testArr = [
-  { name: "Бренд", items: ["Sony", "Apple", "Asus"] },
-  { name: "Тип", items: ["Игровой", "Портативный", "Рабочий"] },
-  { name: "Бренд", items: ["Sony", "Apple", "Asus"] },
-  { name: "Тип", items: ["Игровой", "Портативный", "Рабочий"] },
+  { name: "Бренд", items: brands },
+  { name: "Тип", items: categories },
 ];
 
 class MainPage implements IPage {
@@ -25,12 +24,16 @@ class MainPage implements IPage {
 
   render() {
     const diskountBanner = new ImageLink(diskountBanerImage as string, "home__diskountBanner", "#");
-    this.append(Header.getInstance().render()); // добавляем header
+    const filter = new Filters(testArr).render();
+    const header = Header.getInstance().render();
+    const goodsList = GoodList.getInstance();
+    this.append(header); // добавляем header
     diskountBanner.render(this.body); // добавляем банер со скидками
     const mainContent = createElement("div", "home__main-content");
     this.append(mainContent);
-    const filter = new Filters(testArr).render();
-    mainContent.appendChild(filter);
+    mainContent.appendChild(filter); // добавляем блок с фильтрами
+    mainContent.appendChild(goodsList.render()); // добавляем блок с карточками товаров
+    goodsList.setState(goods.products); // рендер товаров
   }
 }
 

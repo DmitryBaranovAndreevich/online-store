@@ -70,7 +70,7 @@ export class Filters {
   private container;
   private data;
 
-  constructor(data: Array<{ name: string; items: Array<string> }>) {
+  constructor(data: Array<{ name: string; items: { [key: string]: number } }>) {
     this.container = createElement(Tags.div, "accordion");
     this.data = data;
   }
@@ -81,7 +81,9 @@ export class Filters {
     wrapper.appendChild(new HeaderInFilter().render());
     const filterArr = this.data.map(({ name, items }) => {
       const filter = new Filter(name);
-      const checkBoxArr = items.map((item) => new CheckBoxInFilter(item).render());
+      const checkBoxArr = Array.from(Object.keys(items)).map((key) => {
+        return new CheckBoxInFilter(key, items[key]).render();
+      });
       checkBoxArr.forEach((elem) => filter.addElement(elem));
       return filter.render();
     });

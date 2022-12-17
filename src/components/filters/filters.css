@@ -1,11 +1,12 @@
 .accordion {
+  flex: 1 0 auto;
   flex-basis: 312px;
   min-width: 270px;
   margin: 0 20px 0 0;
 }
 
 .accordion__container {
-  max-width: 250px;
+  max-width: 450px;
   border-radius: 16px;
   box-shadow: 0px 0px 4px rgb(231 232 235 / 60%),
     0px 4px 16px rgb(231 232 235 / 60%);
@@ -43,7 +44,7 @@
   cursor: pointer;
   background-color: transparent;
   transition: opacity .4s;
-  display: none;
+  display: block;
   font-size: 18px;
   line-height: 24px;
   font-weight: 500;
@@ -58,6 +59,8 @@
   margin: 0;
   border: none;
   display: none;
+  max-height: 200px;
+  overflow: auto;
 }
 
 .menu-item_active {

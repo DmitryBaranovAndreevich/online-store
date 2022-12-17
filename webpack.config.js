@@ -6,7 +6,7 @@ const EslingPlugin = require("eslint-webpack-plugin");
 
 module.exports = {
   entry: {
-    e: "./src/pages/index.ts",
+    "/": "./src/pages/index.ts",
     main: "./src/pages/home.ts",
     test: "./src/pages/test.ts",
   },
