@@ -1,6 +1,5 @@
 import { Logo } from "../logo/logo";
 import { buttonInHeader } from "../buttonInHeader/buttonInHeader";
-import logoimage from "../../images/logo.png";
 import basketUrl from "../../images/basket.png";
 import ordersUrl from "../../images/orders.png";
 import "./header.css";
@@ -21,7 +20,7 @@ export class Header {
 
   static getInstance() {
     if (Header.instance === null) {
-      const logo = new Logo(logoimage as string);
+      const logo = new Logo();
       const buttonBasket = new buttonInHeader(basketUrl as string, "Корзина", "").render();
       const buttonOrders = new buttonInHeader(ordersUrl as string, "Заказы", "").render();
       Header.instance = new Header(logo, buttonBasket, buttonOrders);

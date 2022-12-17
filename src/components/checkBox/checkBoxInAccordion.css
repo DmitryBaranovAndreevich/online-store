@@ -1,0 +1,44 @@
+.accordion-item__input {
+  position: absolute;
+  top:0;
+  left: 0;
+  opacity: 0;
+}
+
+.accordion-item__input:not(:disabled):not(:checked) + .accordion-item__input-trigger {
+  cursor: pointer;
+}
+
+.accordion-item__input:focus + .accordion-item__input-trigger {
+  cursor: pointer;
+}
+
+.accordion-item__input:checked + .accordion-item__input-trigger::before {
+  transform: rotate(180deg);
+}
+
+.accordion-item__input:checked ~.menu-item {
+  display: block;
+}
+
+.accordion-item__input-trigger {
+  display: flex;
+  flex: 1 0 auto;
+  flex-direction: row-reverse;
+  padding: 34px 0;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 18px;
+  line-height: 20px;
+  font-weight: 400;
+}
+
+.accordion-item__input-trigger::before {
+  content: '';
+  display: inline-block;
+  margin-right: 6px;
+  width: 11px;
+  height: 6px;
+  background: url(../../images/iconForAccordionIcon.png) no-repeat center/cover;
+}
+

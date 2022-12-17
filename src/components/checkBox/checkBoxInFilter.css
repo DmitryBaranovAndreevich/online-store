@@ -1,0 +1,33 @@
+.checkBox__input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  display: none;
+}
+
+.checkBox__input-trigger {
+  display: block;
+}
+
+.checkBox__input-trigger::before {
+  content: "";
+  display: inline-block;
+  vertical-align: bottom;
+  box-sizing: border-box;
+  width: 20px;
+  height: 20px;
+  border: 2px solid black;
+  border-radius: 4px;
+  margin-right: 10px;
+}
+
+.checkBox__input:checked + .checkBox__input-trigger {
+  color: #f06000;
+}
+
+.checkBox__input:checked + .checkBox__input-trigger::before {
+  background: url("../../images/menu_active.png") no-repeat center/cover;
+  border: none;
+}
