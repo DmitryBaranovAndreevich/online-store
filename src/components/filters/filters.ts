@@ -3,6 +3,7 @@ import { CheckBoxInAccordion } from "../checkBox/checkBoxInAccordion";
 import { createElement } from "../../service";
 import { Tags } from "../../interface/tags";
 import { CheckBoxInFilter } from "../checkBox/checkBoxInFilter";
+import { SliderFilter } from "../sliderFilter/sliderFilter";
 
 function openMenu(e: Event) {
   const elem = e.target as HTMLInputElement;
@@ -78,6 +79,8 @@ export class Filters {
   private append() {
     const container = createElement(Tags.div, "accordion__container");
     const wrapper = createElement(Tags.div, "accordion__wrapper");
+    const priceSlider = new SliderFilter("Цена", "price", "0", "1500").render();
+    const scoreSlider = new SliderFilter("На складе", "stock", "0", "500").render();
     wrapper.appendChild(new HeaderInFilter().render());
     const filterArr = this.data.map(({ name, items }) => {
       const filter = new Filter(name);
@@ -89,7 +92,7 @@ export class Filters {
     });
     filterArr.forEach((filter) => wrapper.appendChild(filter));
     container.appendChild(wrapper);
-    this.container.appendChild(container);
+    this.container.append(container, priceSlider, scoreSlider);
   }
 
   public render() {

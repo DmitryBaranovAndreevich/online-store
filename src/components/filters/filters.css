@@ -1,4 +1,9 @@
+:root {
+  --shadow: 0 0 4px hsl(225deg 9% 91% / 60%), 0 4px 16px hsl(225deg 9% 91% / 60%);
+}
+
 .accordion {
+  max-width: 400px;
   flex: 1 0 auto;
   flex-basis: 312px;
   min-width: 270px;
@@ -8,8 +13,7 @@
 .accordion__container {
   max-width: 450px;
   border-radius: 16px;
-  box-shadow: 0px 0px 4px rgb(231 232 235 / 60%),
-    0px 4px 16px rgb(231 232 235 / 60%);
+  box-shadow: var(--shadow);
 }
 
 .accordion__wrapper {
