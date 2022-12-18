@@ -36,7 +36,7 @@ export class SliderFilter {
     this.allCount = allGoods.products.length;
     this.englishName = englishName as keyof IGood;
     this.goodsList = goodsList;
-    goodsList.setSubscribers(this);
+    goodsList.setSubscribers({ obj: this, visit: false, type: name });
   }
 
   public updateText() {

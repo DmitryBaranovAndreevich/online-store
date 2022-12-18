@@ -3,7 +3,6 @@ import { IGood } from "../../interface/good";
 import { Tags } from "../../interface/tags";
 import { createElement } from "../../service";
 import { CheckBoxInFilter } from "../checkBox/checkBoxInFilter";
-import { goods } from "../../service";
 import { SliderFilter } from "../sliderFilter/sliderFilter";
 
 export class Good {
@@ -35,7 +34,7 @@ export class GoodList {
   private static instance: GoodList | null = null;
   private state: Array<IGood> | [];
   private container;
-  public subscribers: Array<CheckBoxInFilter | SliderFilter> = [];
+  public subscribers: Array<{ obj: CheckBoxInFilter | SliderFilter; visit: boolean; type: string }> = [];
   constructor() {
     this.container = createElement(Tags.div, "home__good-list");
     this.state = [];
@@ -46,17 +45,10 @@ export class GoodList {
   }
 
   public updateState() {
-    this.setState(goods.products);
-    this.subscribers.forEach((elem) => {
-      if (elem instanceof CheckBoxInFilter && elem.checkbox.checked) {
-        elem.addClick();
-      }
-
-      if (elem instanceof SliderFilter) elem.filter();
-    });
+    (this.subscribers.find(({ obj }) => obj instanceof CheckBoxInFilter)?.obj as CheckBoxInFilter)?.addClick();
   }
 
-  public setSubscribers(subscriber: CheckBoxInFilter | SliderFilter) {
+  public setSubscribers(subscriber: { obj: CheckBoxInFilter | SliderFilter; visit: boolean; type: string }) {
     this.subscribers.push(subscriber);
   }
 
@@ -72,11 +64,8 @@ export class GoodList {
     this.clear();
     this.state = value;
     this.fill();
-    this.subscribers.forEach((elem) => elem.updateText());
-    // this.notifySubscribers();
+    this.subscribers.forEach(({ obj }) => obj.updateText());
   }
-
-  // private notifySubscribers() {}
 
   private fill() {
     this.state.forEach((elem) => this.container.appendChild(new Good(elem).render()));
@@ -87,8 +76,8 @@ export class GoodList {
   }
 
   public render() {
-    this.subscribers.forEach((elem) => {
-      if (elem instanceof CheckBoxInFilter) elem.addEventListener();
+    this.subscribers.forEach(({ obj }) => {
+      if (obj instanceof CheckBoxInFilter) obj.addEventListener();
     });
     return this.container;
   }
