@@ -6,6 +6,8 @@ import { Filters } from "../components/filters/filters";
 import diskountBanerImage from "../images/discountsBaner.jpg";
 import { createElement, goods, brands, categories } from "../service";
 import { GoodList } from "../components/goodsList/goodsList";
+import { Tags } from "../interface/tags";
+import { SortSection } from "../components/sortSection/sortSection";
 
 const testArr = [
   { name: "Бренд", items: brands },
@@ -27,12 +29,15 @@ class MainPage implements IPage {
     const filter = new Filters(testArr).render();
     const header = Header.getInstance().render();
     const goodsList = GoodList.getInstance();
+    const sortSection = new SortSection();
+    const wrapper = createElement(Tags.div, "home__goods-wrapper");
+    wrapper.append(sortSection.render(), goodsList.render());
     this.append(header); // добавляем header
     diskountBanner.render(this.body); // добавляем банер со скидками
     const mainContent = createElement("div", "home__main-content");
     this.append(mainContent);
-    mainContent.appendChild(filter); // добавляем блок с фильтрами
-    mainContent.appendChild(goodsList.render()); // добавляем блок с карточками товаров
+    mainContent.append(filter, wrapper); // добавляем блок с фильтрами
+    // mainContent.appendChild(goodsList.render()); // добавляем блок с карточками товаров
     goodsList.setState(goods.products); // рендер товаров
   }
 }

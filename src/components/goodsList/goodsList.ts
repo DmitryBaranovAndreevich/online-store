@@ -4,6 +4,7 @@ import { Tags } from "../../interface/tags";
 import { createElement } from "../../service";
 import { CheckBoxInFilter } from "../checkBox/checkBoxInFilter";
 import { SliderFilter } from "../sliderFilter/sliderFilter";
+import { SortSection } from "../sortSection/sortSection";
 
 export class Good {
   private params;
@@ -34,7 +35,7 @@ export class GoodList {
   private static instance: GoodList | null = null;
   private state: Array<IGood> | [];
   private container;
-  public subscribers: Array<{ obj: CheckBoxInFilter | SliderFilter; visit: boolean; type: string }> = [];
+  public subscribers: Array<{ obj: CheckBoxInFilter | SliderFilter | SortSection; visit: boolean; type: string }> = [];
   constructor() {
     this.container = createElement(Tags.div, "home__good-list");
     this.state = [];
@@ -48,7 +49,7 @@ export class GoodList {
     (this.subscribers.find(({ obj }) => obj instanceof CheckBoxInFilter)?.obj as CheckBoxInFilter)?.addClick();
   }
 
-  public setSubscribers(subscriber: { obj: CheckBoxInFilter | SliderFilter; visit: boolean; type: string }) {
+  public setSubscribers(subscriber: { obj: CheckBoxInFilter | SliderFilter | SortSection; visit: boolean; type: string }) {
     this.subscribers.push(subscriber);
   }
 
@@ -64,7 +65,9 @@ export class GoodList {
     this.clear();
     this.state = value;
     this.fill();
-    this.subscribers.forEach(({ obj }) => obj.updateText());
+    this.subscribers.forEach(({ obj }) => {
+      if (!(obj instanceof SortSection)) obj.updateText();
+    });
   }
 
   private fill() {

@@ -16,4 +16,11 @@
   width: 100%;
 }
 
+.home__sort-section {
+  max-width: 230px;
+  box-shadow: var(--shadow);
+  padding: 5px;
+  margin-bottom: 10px;
+}
+
 
