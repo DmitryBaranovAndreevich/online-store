@@ -8,4 +8,5 @@ export enum Tags {
   button = "button",
   section = "section",
   h1 = "h1",
+  span = "span",
 }

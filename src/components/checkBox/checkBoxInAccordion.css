@@ -23,6 +23,7 @@
 
 .accordion-item__input-trigger {
   display: flex;
+  flex: 1 0 auto;
   flex-direction: row-reverse;
   padding: 34px 0;
   justify-content: space-between;

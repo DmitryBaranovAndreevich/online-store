@@ -1,5 +1,6 @@
 import { createElement, generateHash } from "../../service";
 import { Tags } from "../../interface/tags";
+import "./checkBox.css";
 
 export class Checkbox {
   text;

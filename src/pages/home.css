@@ -10,7 +10,10 @@
 }
 
 .home__main-content {
+  display: flex;
   margin: 20px auto;
   max-width: var(--max-width);
   width: 100%;
 }
+
+
