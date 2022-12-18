@@ -8,16 +8,11 @@
     height: 100%;
 }
 
-.header {
-    width: 1220px;
-    height: 80px;
-    border: black solid 1px;
-}
-
 .main {
-    width: 1220px;
+    max-width: var(--max-width);
     height: 540px;
     border: black solid 1px;
+    margin: 10px auto;
 }
 
 .goods__way {
@@ -59,6 +54,10 @@
     width: 100%;
     height: 80%;
     border: black solid 1px;
+    background-image: initial;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
 }
 
 .goods__photo-list {
@@ -75,6 +74,24 @@
     border: black solid 1px;
 }
 
+.char__field {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 16.66%;
+    border: black solid 1px;
+}
+
+.char__field-name {
+    width: inherit;
+    height: 30%;
+}
+
+.char__field-content {
+    width: inherit;
+    height: 70%;
+}
+
 .goods__purchase-block {
     display: flex;
     flex-direction: column;
@@ -86,9 +103,13 @@
 }
 
 .goods__price {
+    display: flex;
+    justify-content: center;
+    align-items: center;
     width: 100%;
     height: 40%;
     border: black solid 1px;
+    text-align: center;
 }
 
 .chart__button {
