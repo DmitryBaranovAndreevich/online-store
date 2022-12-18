@@ -85,7 +85,7 @@ export class Filters {
     const filterArr = this.data.map(({ name, items }) => {
       const filter = new Filter(name);
       const checkBoxArr = Array.from(Object.keys(items)).map((key) => {
-        return new CheckBoxInFilter(key, items[key]).render();
+        return new CheckBoxInFilter(key, items[key], name).render();
       });
       checkBoxArr.forEach((elem) => filter.addElement(elem));
       return filter.render();
