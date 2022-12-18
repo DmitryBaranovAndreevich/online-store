@@ -36,32 +36,31 @@ export class CheckBoxInFilter extends Checkbox {
   };
 
   public updateGoodsList = () => {
-    if (this.checkbox.checked) this.addClick();
-    else this.removeClick();
+    this.addClick();
   };
 
-  private removeClick() {
-    this.goodsList.updateState();
-  }
-
   public addClick() {
+    const allTypes = ["Бренд", "Тип"];
+    let sortArr = this.allGoods.products;
     const sliders = this.goodsList.subscribers.filter(({ obj }) => obj instanceof SliderFilter); //ищем фильтры-слайдеры
     this.goodsList.setState(this.allGoods.products);
-    const arrMyType = this.goodsList.subscribers.filter(
-      (elem) => elem.type === this.type && (elem.obj as CheckBoxInFilter).checkbox.checked // ищем другие чекбоксы, такого же типа
-    );
-    const arrToFilter = arrMyType.map((elem) => (elem.obj as CheckBoxInFilter).text);
-    if (arrMyType.length) {
-      //если есть, что сортировать, то сортируем
-      const sortArr = this.goodsList.getState.filter((el) => {
-        for (const key of arrToFilter) {
-          if (Object.values(el).includes(key)) return true;
-        }
-        return false;
-      });
-      sliders.forEach((slider) => (slider.obj as SliderFilter).filter()); // фильтруем по слайдерам
-      this.goodsList.setState(sortArr);
-    }
+    allTypes.forEach((types) => {
+      const arrMyType = this.goodsList.subscribers.filter(
+        (elem) => elem.type === types && (elem.obj as CheckBoxInFilter).checkbox.checked // ищем другие выделенные чекбоксы, такого же типа
+      );
+      const arrToFilter = arrMyType.map((elem) => (elem.obj as CheckBoxInFilter).text);
+      if (arrMyType.length) {
+        //если есть, что сортировать, то сортируем
+        sortArr = sortArr.filter((el) => {
+          for (const key of arrToFilter) {
+            if (Object.values(el).includes(key)) return true;
+          }
+          return false;
+        });
+      }
+    });
+    sliders.forEach((slider) => (slider.obj as SliderFilter).filter()); // фильтруем по слайдерам
+    this.goodsList.setState(sortArr);
   }
 
   public updateText() {
