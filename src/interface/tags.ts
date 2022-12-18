@@ -6,4 +6,6 @@ export enum Tags {
   a = "a",
   label = "label",
   button = "button",
+  section = "section",
+  h1 = "h1",
 }
