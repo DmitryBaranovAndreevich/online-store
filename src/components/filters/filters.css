@@ -22,7 +22,7 @@
 
 .accordion-item {
   position: relative;
-  border-bottom: 1px solid #E6E7EB;
+  border-bottom: 1px solid #e6e7eb;
 }
 
 .accordion-item:last-child {
@@ -47,7 +47,7 @@
   border: none;
   cursor: pointer;
   background-color: transparent;
-  transition: opacity .4s;
+  transition: opacity 0.4s;
   display: block;
   font-size: 18px;
   line-height: 24px;
@@ -55,7 +55,7 @@
 }
 
 .accordion-item__button:hover {
-  opacity: .6;
+  opacity: 0.6;
 }
 
 .menu-item {
@@ -75,6 +75,32 @@
   margin-bottom: 16px;
 }
 
+.menu-item_position_absolute {
+  background-color: rgba(0, 0, 0, 0.4);
+  width: 100%;
+  position: absolute;
+  bottom: -155px;
+}
+
 .checkBox + .checkBox {
+  margin-top: 10px;
+}
+
+.home__sort-buttons {
+  background-color: aliceblue;
+  display: block;
+  width: 100%;
+  cursor: pointer;
+  border: 3px solid transparent;
+  transition: 0.2s;
+  border-radius: 10px;
+  transition: .2s;
+}
+
+.home__sort-buttons:hover {
+  opacity: .8;
+}
+
+.home__sort-buttons + .home__sort-buttons {
   margin-top: 10px;
 }

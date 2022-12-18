@@ -36,27 +36,37 @@ class HeaderInFilter {
   }
 }
 
-class Filter {
+export class Filter {
   private name;
   private container;
   private menu;
-  constructor(name: string) {
+  private checkBox;
+  constructor(name: string, position = "static") {
     this.name = name;
     this.container = createElement(Tags.div, "accordion-item");
-    this.menu = createElement(Tags.div, "menu-item");
+    this.menu = createElement(Tags.div, `menu-item menu-item_position_${position}`);
+    this.checkBox = new CheckBoxInAccordion(this.name);
   }
 
   private handeleClick() {
     this.container.addEventListener("click", openMenu);
   }
 
+  get root() {
+    return this.container as HTMLDivElement;
+  }
+
+  get title() {
+    return this.checkBox;
+  }
+
   private append() {
-    const checkBox = new CheckBoxInAccordion(this.name).render();
+    const checkBox = this.checkBox.render();
     this.container.appendChild(checkBox);
     this.container.appendChild(this.menu);
   }
-  public addElement(node: HTMLElement) {
-    this.menu.appendChild(node);
+  public addElement(...node: Array<HTMLElement>) {
+    this.menu.append(...node);
     return this;
   }
 

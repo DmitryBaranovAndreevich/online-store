@@ -5,6 +5,7 @@ import { Tags } from "../../interface/tags";
 import { GoodList } from "../goodsList/goodsList";
 import { IGood } from "../../interface/good";
 import { SliderFilter } from "../sliderFilter/sliderFilter";
+import { SortSection } from "../sortSection/sortSection";
 
 export class CheckBoxInFilter extends Checkbox {
   private goodsList;
@@ -43,6 +44,7 @@ export class CheckBoxInFilter extends Checkbox {
     const allTypes = ["Бренд", "Тип"];
     let sortArr = this.allGoods.products;
     const sliders = this.goodsList.subscribers.filter(({ obj }) => obj instanceof SliderFilter); //ищем фильтры-слайдеры
+    const sorts = this.goodsList.subscribers.find(({ obj }) => obj instanceof SortSection); //ищем сортировочный чекбокс
     this.goodsList.setState(this.allGoods.products);
     allTypes.forEach((types) => {
       const arrMyType = this.goodsList.subscribers.filter(
@@ -61,6 +63,7 @@ export class CheckBoxInFilter extends Checkbox {
     });
     sliders.forEach((slider) => (slider.obj as SliderFilter).filter()); // фильтруем по слайдерам
     this.goodsList.setState(sortArr);
+    sorts?.obj.updateText(sorts.obj.title.textContent as string);
   }
 
   public updateText() {
