@@ -9,6 +9,7 @@ module.exports = {
     "/": "./src/pages/index.ts",
     main: "./src/pages/home.ts",
     test: "./src/pages/test.ts",
+    goods: "./src/pages/goods.ts",
   },
   output: {
     path: path.resolve(__dirname, "dist"),
