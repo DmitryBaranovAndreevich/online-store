@@ -2,7 +2,9 @@ import "./goodsList.css";
 import { IGood } from "../../interface/good";
 import { Tags } from "../../interface/tags";
 import { createElement } from "../../service";
-import { Checkbox } from "../checkBox/checkBox";
+import { CheckBoxInFilter } from "../checkBox/checkBoxInFilter";
+import { goods } from "../../service";
+import { SliderFilter } from "../sliderFilter/sliderFilter";
 
 export class Good {
   private params;
@@ -13,20 +15,14 @@ export class Good {
   }
 
   private append() {
-    const nodeArr = [];
     const image = createElement(Tags.img, "good-card__image") as HTMLImageElement;
     image.src = this.params.thumbnail;
     image.alt = this.params.title;
-    nodeArr.push(image);
     const price = createElement(Tags.p, "good-card__price", `от ${this.params.price} руб.`);
-    nodeArr.push(price);
     const name = createElement(Tags.p, "good-card__title", this.params.title);
-    nodeArr.push(name);
     const buyButton = createElement(Tags.button, "good-card__button", "Купить");
-    nodeArr.push(buyButton);
     const descriptionButton = createElement(Tags.button, "good-card__button", "Описание");
-    nodeArr.push(descriptionButton);
-    nodeArr.forEach((node) => this.container.appendChild(node));
+    this.container.append(image, price, name, buyButton, descriptionButton);
   }
 
   public render() {
@@ -39,7 +35,7 @@ export class GoodList {
   private static instance: GoodList | null = null;
   private state: Array<IGood> | [];
   private container;
-  public subscribers: Array<Checkbox> = [];
+  public subscribers: Array<CheckBoxInFilter | SliderFilter> = [];
   constructor() {
     this.container = createElement(Tags.div, "home__good-list");
     this.state = [];
@@ -49,7 +45,18 @@ export class GoodList {
     return this.state;
   }
 
-  public setSubscribers(subscriber: Checkbox) {
+  public updateState() {
+    this.setState(goods.products);
+    this.subscribers.forEach((elem) => {
+      if (elem instanceof CheckBoxInFilter && elem.checkbox.checked) {
+        elem.addClick();
+      }
+
+      if (elem instanceof SliderFilter) elem.filter();
+    });
+  }
+
+  public setSubscribers(subscriber: CheckBoxInFilter | SliderFilter) {
     this.subscribers.push(subscriber);
   }
 
@@ -65,6 +72,7 @@ export class GoodList {
     this.clear();
     this.state = value;
     this.fill();
+    this.subscribers.forEach((elem) => elem.updateText());
     // this.notifySubscribers();
   }
 
@@ -79,6 +87,9 @@ export class GoodList {
   }
 
   public render() {
+    this.subscribers.forEach((elem) => {
+      if (elem instanceof CheckBoxInFilter) elem.addEventListener();
+    });
     return this.container;
   }
 }
