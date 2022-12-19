@@ -1,10 +1,12 @@
 import "./goodsList.css";
 import { IGood } from "../../interface/good";
 import { Tags } from "../../interface/tags";
-import { createElement } from "../../service";
+import { createElement, goods } from "../../service";
 import { CheckBoxInFilter } from "../checkBox/checkBoxInFilter";
 import { SliderFilter } from "../sliderFilter/sliderFilter";
 import { SortSection } from "../sortSection/sortSection";
+// import { SortElements } from "../../service/sortElements";
+// import { FilterObserver } from "../../service/filtrObserver";
 
 export class Good {
   private params;
@@ -45,10 +47,6 @@ export class GoodList {
     return this.state;
   }
 
-  public updateState() {
-    (this.subscribers.find(({ obj }) => obj instanceof CheckBoxInFilter)?.obj as CheckBoxInFilter)?.addClick();
-  }
-
   public setSubscribers(subscriber: { obj: CheckBoxInFilter | SliderFilter | SortSection; visit: boolean; type: string }) {
     this.subscribers.push(subscriber);
   }
@@ -61,17 +59,13 @@ export class GoodList {
     return GoodList.instance;
   }
 
-  public setState(value: Array<IGood> | []) {
+  public updateRender(data: Array<IGood> | []) {
     this.clear();
-    this.state = value;
-    this.fill();
-    this.subscribers.forEach(({ obj }) => {
-      if (!(obj instanceof SortSection)) obj.updateText();
-    });
+    this.fill(data);
   }
 
-  private fill() {
-    this.state.forEach((elem) => this.container.appendChild(new Good(elem).render()));
+  private fill(data: Array<IGood> | []) {
+    data.forEach((elem) => this.container.appendChild(new Good(elem).render()));
   }
 
   private clear() {
@@ -79,9 +73,7 @@ export class GoodList {
   }
 
   public render() {
-    this.subscribers.forEach(({ obj }) => {
-      if (obj instanceof CheckBoxInFilter) obj.addEventListener();
-    });
+    this.updateRender(goods.products);
     return this.container;
   }
 }
