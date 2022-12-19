@@ -1,11 +1,13 @@
 import { IGood } from "../../interface/good";
 import { Tags } from "../../interface/tags";
 import { createElement, generateHash, goods } from "../../service";
-import { GoodList } from "../goodsList/goodsList";
+import { FilterObserver } from "../../service/filterObserver";
+import { SortElements } from "../../service/sortElements";
 import "./sliderFilter.css";
 
 export class SliderFilter {
-  goodsList;
+  observer;
+  sorter;
   container;
   title;
   rightInput;
@@ -21,27 +23,37 @@ export class SliderFilter {
   count = 0;
   englishName;
 
-  constructor(name: string, englishName: string, min: string, max: string, allGoods = goods, goodsList: GoodList = GoodList.getInstance()) {
+  constructor(
+    name: string,
+    englishName: string,
+    min: string,
+    max: string,
+    allGoods = goods,
+    observer: FilterObserver = FilterObserver.getInstance(),
+    sorter = SortElements.getInstance()
+  ) {
     this.container = createElement(Tags.div, "slider");
     this.title = createElement(Tags.span, "slider__span", name);
     this.rightSpan = createElement(Tags.span, "slider__span");
     this.leftSpan = createElement(Tags.span, "slider__span");
     this.resultsSpan = createElement(Tags.span, "slider__span");
     this.rightInput = createElement(Tags.input, "slider__input") as HTMLInputElement;
+    this.rightInput.id = `slider__input_right_${generateHash(name)}`;
     this.leftInput = createElement(Tags.input, "slider__input") as HTMLInputElement;
+    this.leftInput.id = `slider__input_left_${generateHash(name)}`;
     this.track = createElement(Tags.div, "slider__track");
     this.min = min;
     this.max = max;
     this.hash = generateHash(name);
     this.allCount = allGoods.products.length;
     this.englishName = englishName as keyof IGood;
-    this.goodsList = goodsList;
-    goodsList.setSubscribers({ obj: this, visit: false, type: name });
+    this.observer = observer;
+    this.sorter = sorter;
+    observer.subscribe({ obj: this, visit: false, type: name });
   }
 
-  public updateText() {
-    const goodsInGoodsList = this.goodsList.getState;
-    this.count = goodsInGoodsList.filter((el) => el[this.englishName] >= this.min && el[this.englishName] < this.max).length;
+  public updateText(data: Array<IGood>) {
+    this.count = data.filter((el) => el[this.englishName] >= this.min && el[this.englishName] < this.max).length;
     this.setResults();
   }
 
@@ -83,8 +95,7 @@ export class SliderFilter {
     }
     this.leftSpan.textContent = `от ${this.leftInput.value}`;
     this.fillColor();
-    this.goodsList.updateState();
-    this.filter();
+    this.sorter.sort();
   };
 
   private rightSlider = () => {
@@ -94,15 +105,8 @@ export class SliderFilter {
     }
     this.rightSpan.textContent = `до ${this.rightInput.value}`;
     this.fillColor();
-    this.goodsList.updateState();
-    this.filter();
+    this.sorter.sort();
   };
-
-  public filter() {
-    this.goodsList.setState(
-      this.goodsList.getState.filter((el) => el[this.englishName] >= this.leftInput.value && el[this.englishName] < this.rightInput.value)
-    );
-  }
 
   private createSlider() {
     const sliderContainer = createElement(Tags.div, "slider__input-container");

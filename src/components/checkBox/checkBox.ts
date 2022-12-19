@@ -16,6 +16,10 @@ export class Checkbox {
     this.hash = generateHash(text);
   }
 
+  get listener() {
+    return this.checkbox;
+  }
+
   get title() {
     return this.label;
   }

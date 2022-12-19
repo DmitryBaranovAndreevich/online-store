@@ -2,10 +2,12 @@ import "./filters.css";
 import { CheckBoxInAccordion } from "../checkBox/checkBoxInAccordion";
 import { createElement } from "../../service";
 import { Tags } from "../../interface/tags";
+import { SortElements } from "../../service/sortElements";
 import { CheckBoxInFilter } from "../checkBox/checkBoxInFilter";
 import { SliderFilter } from "../sliderFilter/sliderFilter";
 
 function openMenu(e: Event) {
+  e.preventDefault();
   const elem = e.target as HTMLInputElement;
   if (elem.classList.contains("accordion-item__input-trigger")) {
     const parent = elem.closest(".accordion-item");
@@ -46,10 +48,11 @@ export class Filter {
     this.container = createElement(Tags.div, "accordion-item");
     this.menu = createElement(Tags.div, `menu-item menu-item_position_${position}`);
     this.checkBox = new CheckBoxInAccordion(this.name);
+    SortElements.getInstance().addType(name);
   }
 
   private handeleClick() {
-    this.container.addEventListener("click", openMenu);
+    this.checkBox.label.addEventListener("click", openMenu);
   }
 
   get root() {
@@ -92,10 +95,11 @@ export class Filters {
     const priceSlider = new SliderFilter("Цена", "price", "0", "1500").render();
     const scoreSlider = new SliderFilter("На складе", "stock", "0", "500").render();
     wrapper.appendChild(new HeaderInFilter().render());
+
     const filterArr = this.data.map(({ name, items }) => {
       const filter = new Filter(name);
       const checkBoxArr = Array.from(Object.keys(items)).map((key) => {
-        return new CheckBoxInFilter(key, items[key], name).render();
+        return new CheckBoxInFilter(key, items[key], name).addEventListener().render();
       });
       checkBoxArr.forEach((elem) => filter.addElement(elem));
       return filter.render();
