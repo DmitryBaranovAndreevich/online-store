@@ -18,23 +18,52 @@ class GoodsCart {
     const main: HTMLElement = createElement("div", "main");
     this.append(main);
     const goodsWay: HTMLElement = createElement("section", "goods__way");
-    main.append(goodsWay);
+
+    for (let i = 0; i < 7; i++) {
+      const breadCrumb: HTMLElement = createElement("a", "bread__crumb");
+      goodsWay.append(breadCrumb);
+      if (i % 2 !== 0) {
+        breadCrumb.textContent = ">>";
+      } else if (i === 0) {
+        breadCrumb.textContent = "MAIN";
+        breadCrumb.style.cursor = "pointer";
+        breadCrumb.onclick = () => {
+          window.location.href = "./main";
+        };
+      } else if (i === 2) {
+        breadCrumb.textContent = goodsList[2].category.toUpperCase();
+        breadCrumb.style.cursor = "pointer";
+        breadCrumb.onclick = () => {
+          window.location.href = "#";
+        };
+      } else if (i === 4) {
+        breadCrumb.textContent = goodsList[2].brand.toUpperCase();
+        breadCrumb.style.cursor = "pointer";
+        breadCrumb.onclick = () => {
+          window.location.href = "#";
+        };
+      } else if (i === 6) {
+        breadCrumb.textContent = goodsList[2].name.toUpperCase();
+        breadCrumb.style.cursor = "pointer";
+        breadCrumb.onclick = () => {
+          window.location.href = "#";
+        };
+      }
+    }
     const goodsContainer: HTMLElement = createElement("section", "goods__container");
-    main.append(goodsContainer);
+    main.append(goodsWay, goodsContainer);
     const goodsName: HTMLElement = createElement("h1", "goods__name");
-    goodsContainer.append(goodsName);
-    goodsName.textContent = goodsList[2].name;
     const goodsInfo: HTMLElement = createElement("div", "goods__info");
-    goodsContainer.append(goodsInfo);
+    goodsContainer.append(goodsName, goodsInfo);
+    goodsName.textContent = goodsList[2].name;
     const goodsPhotoBLock: HTMLElement = createElement("div", "goods__photo-block");
-    goodsInfo.append(goodsPhotoBLock);
     const goodsPhotoMain: HTMLElement = createElement("div", "goods__photo-main");
-    goodsPhotoBLock.append(goodsPhotoMain);
     goodsPhotoMain.style.backgroundImage = goodsList[2].picture;
     const goodsPhotoList: HTMLElement = createElement("div", "goods__photo-list");
-    goodsPhotoBLock.append(goodsPhotoList);
+    goodsPhotoBLock.append(goodsPhotoMain, goodsPhotoList);
     const goodsDescriptionBLock: HTMLElement = createElement("div", "goods__description-block");
-    goodsInfo.append(goodsDescriptionBLock);
+    const goodsPurchaseBLock: HTMLElement = createElement("div", "goods__purchase-block");
+    goodsInfo.append(goodsPhotoBLock, goodsDescriptionBLock, goodsPurchaseBLock);
 
     for (let i = 0; i < 6; i++) {
       const charField: HTMLElement = createElement("div", "char__field");
@@ -65,17 +94,13 @@ class GoodsCart {
       }
     }
 
-    const goodsPurchaseBLock: HTMLElement = createElement("div", "goods__purchase-block");
-    goodsInfo.append(goodsPurchaseBLock);
     const goodsPrice: HTMLElement = createElement("div", "goods__price");
-    goodsPurchaseBLock.append(goodsPrice);
     goodsPrice.textContent = goodsList[2].price.toString() + " $";
     const chartButton: HTMLElement = createElement("button", "chart__button");
-    goodsPurchaseBLock.append(chartButton);
     chartButton.textContent = "ADD TO CHART";
     const buyButton: HTMLElement = createElement("button", "buy__button");
-    goodsPurchaseBLock.append(buyButton);
     buyButton.textContent = "BUY NOW";
+    goodsPurchaseBLock.append(goodsPrice, chartButton, buyButton);
   }
 }
 
