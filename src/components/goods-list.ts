@@ -1,6 +1,9 @@
 import samsung from "./../images/goodsImages/tv-samsung-qe50q80aau.jpg";
 import toshiba from "./../images/goodsImages/tv-toshiba-50c350ke.jpg";
 import iphone from "./../images/goodsImages/apple-iphone-13-midnight.jpg";
+import iphone_2 from "./../images/goodsImages/apple-iphone-13-midnight-2.jpg";
+import iphone_3 from "./../images/goodsImages/apple-iphone-13-midnight-3.jpg";
+import iphone_4 from "./../images/goodsImages/apple-iphone-13-midnight-4.jpg";
 
 interface IgoodsList {
   name: string;
@@ -12,7 +15,7 @@ interface IgoodsList {
   discount: number;
   stock: number;
   price: number;
-  picture: string;
+  picture: string | string[];
 }
 
 const goodsList: IgoodsList[] = [
@@ -26,7 +29,7 @@ const goodsList: IgoodsList[] = [
     discount: 10,
     stock: 12,
     price: 550,
-    picture: `url(${samsung as string})`,
+    picture: [`url(${samsung as string})`],
   },
   {
     name: "Tv Toshiba 50C350KE",
@@ -38,7 +41,7 @@ const goodsList: IgoodsList[] = [
     discount: 5,
     stock: 15,
     price: 390,
-    picture: `url(${toshiba as string})`,
+    picture: [`url(${toshiba as string})`],
   },
   {
     name: "Smartphone Apple iPhone 13 128Gb Midnight",
@@ -50,7 +53,7 @@ const goodsList: IgoodsList[] = [
     discount: 0,
     stock: 10,
     price: 600,
-    picture: `url(${iphone as string})`,
+    picture: [`url(${iphone as string})`, `url(${iphone_2 as string})`, `url(${iphone_3 as string})`, `url(${iphone_4 as string})`],
   },
 ];
 

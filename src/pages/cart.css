@@ -1,0 +1,86 @@
+:root {
+    --shadow: 0 0 4px hsl(225deg 9% 91% / 60%), 0 4px 16px hsl(225deg 9% 91% / 60%);
+  }
+
+.main {
+    display: flex;
+    justify-content: space-between;
+    max-width: var(--max-width);
+    height: 540px;
+    margin: 10px auto;
+}
+
+.products {
+    width: 80%;
+    height: 100%;
+    border-radius: 16px;
+    box-shadow: var(--shadow);
+}
+
+.products__header {
+    width: 100%;
+    height: 15%;
+    border-radius: 16px;
+    box-shadow: var(--shadow);
+    font-size: 36px;
+}
+
+.products__field {
+    width: 100%;
+    height: 85%;
+    border-radius: 16px;
+    box-shadow: var(--shadow);
+}
+
+.products__item {
+    display: flex;
+    width: 100%;
+    height: 100px;
+    border-radius: 16px;
+    box-shadow: var(--shadow);
+}
+
+.item__number {
+    width: 10%;
+    height: 100%;
+}
+
+.item__photo {
+    width: 15%;
+    height: 100%;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+}
+
+.item__info {
+    width: 55%;
+    height: 100%;
+}
+
+.item__amount {
+    width: 20%;
+    height: 100%;
+}
+
+.summary {
+    width: 20%;
+    height: 100%;
+    border-radius: 16px;
+    box-shadow: var(--shadow);
+}
+
+.summary__header {
+    width: 100%;
+    height: 15%;
+    border-radius: 16px;
+    box-shadow: var(--shadow);
+    font-size: 36px;
+}
+
+.summary__field {
+    width: 100%;
+    height: 85%;
+    border-radius: 16px;
+    box-shadow: var(--shadow);
+}
