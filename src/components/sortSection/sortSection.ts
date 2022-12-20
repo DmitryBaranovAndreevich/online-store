@@ -5,6 +5,7 @@ import { SortElements } from "../../service/sortElements";
 import { Filter } from "../filters/filters";
 // import { GoodList } from "../goodsList/goodsList";
 import { SearchBar } from "../seachBar/searchBar";
+import { SizeButtons } from "../sizeBuutons/sizeButtons";
 import "./sortSection.css";
 
 export class SortSection {
@@ -59,6 +60,7 @@ export class SortSection {
 
   public render() {
     const serchBar = new SearchBar();
+    const sizeBar = new SizeButtons();
     this.buttons = this.buttonsNames.map((name) => {
       const button = createElement(Tags.button, "home__sort-buttons", name) as HTMLButtonElement;
       button.type = "button";
@@ -67,7 +69,7 @@ export class SortSection {
       return button;
     });
     this.filter.addElement(...this.buttons);
-    this.container.append(this.filter.render(), serchBar.render());
+    this.container.append(this.filter.render(), serchBar.render(), sizeBar.render());
     return this.container;
   }
 }
