@@ -10,6 +10,7 @@ module.exports = {
     main: "./src/pages/home.ts",
     test: "./src/pages/test.ts",
     goods: "./src/pages/goods.ts",
+    cart: "./src/pages/cart.ts",
   },
   output: {
     path: path.resolve(__dirname, "dist"),

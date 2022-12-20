@@ -29,7 +29,7 @@ const goodsList: IgoodsList[] = [
     discount: 10,
     stock: 12,
     price: 550,
-    picture: `url(${samsung as string})`,
+    picture: [`url(${samsung as string})`],
   },
   {
     name: "Tv Toshiba 50C350KE",
@@ -41,7 +41,7 @@ const goodsList: IgoodsList[] = [
     discount: 5,
     stock: 15,
     price: 390,
-    picture: `url(${toshiba as string})`,
+    picture: [`url(${toshiba as string})`],
   },
   {
     name: "Smartphone Apple iPhone 13 128Gb Midnight",
