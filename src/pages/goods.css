@@ -75,8 +75,17 @@
 }
 
 .goods__photo-list {
+    display: flex;
     width: 100%;
     height: 20%;
+}
+
+.goods__photo-list__elem {
+    width: 25%;
+    height: 100%;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
 }
 
 .goods__description-block {

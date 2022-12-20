@@ -58,9 +58,19 @@ class GoodsCart {
     goodsName.textContent = goodsList[2].name;
     const goodsPhotoBLock: HTMLElement = createElement("div", "goods__photo-block");
     const goodsPhotoMain: HTMLElement = createElement("div", "goods__photo-main");
-    goodsPhotoMain.style.backgroundImage = goodsList[2].picture;
+    goodsPhotoMain.style.backgroundImage = goodsList[2].picture[0];
     const goodsPhotoList: HTMLElement = createElement("div", "goods__photo-list");
     goodsPhotoBLock.append(goodsPhotoMain, goodsPhotoList);
+
+    for (let i = 0; i < goodsList[2].picture.length; i++) {
+      const goodsPhotoListElem: HTMLElement = createElement("div", "goods__photo-list__elem");
+      goodsPhotoList.append(goodsPhotoListElem);
+      goodsPhotoListElem.style.backgroundImage = goodsList[2].picture[i];
+      goodsPhotoListElem.style.cursor = "pointer";
+      goodsPhotoListElem.addEventListener("click", function (): void {
+        goodsPhotoMain.style.backgroundImage = goodsList[2].picture[i];
+      });
+    }
     const goodsDescriptionBLock: HTMLElement = createElement("div", "goods__description-block");
     const goodsPurchaseBLock: HTMLElement = createElement("div", "goods__purchase-block");
     goodsInfo.append(goodsPhotoBLock, goodsDescriptionBLock, goodsPurchaseBLock);
