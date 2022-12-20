@@ -1,6 +1,7 @@
 import { createElement, generateHash } from "../../service";
 import { Tags } from "../../interface/tags";
 import "./checkBox.css";
+import { UrlHandler } from "../../service/urlHandler";
 
 export class Checkbox {
   text;
@@ -37,6 +38,7 @@ export class Checkbox {
     this.setAtribute();
     this.container.appendChild(this.checkbox);
     this.container.appendChild(this.label);
+    if (new UrlHandler().searchParams(this.checkbox.id)) this.checkbox.checked = true;
     return this.container;
   }
 }

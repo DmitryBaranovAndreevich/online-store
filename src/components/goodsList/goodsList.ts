@@ -2,20 +2,21 @@ import "./goodsList.css";
 import { IGood } from "../../interface/good";
 import { Tags } from "../../interface/tags";
 import { createElement, goods } from "../../service";
-import { CheckBoxInFilter } from "../checkBox/checkBoxInFilter";
-import { SliderFilter } from "../sliderFilter/sliderFilter";
-import { SortSection } from "../sortSection/sortSection";
-// import { SortElements } from "../../service/sortElements";
-// import { FilterObserver } from "../../service/filtrObserver";
+import { UrlHandler } from "../../service/urlHandler";
 
 export class Good {
   private params;
   private container;
   private size;
+  private buyButton;
+  private descriptionButton;
+
   constructor(params: IGood, size: string) {
     this.params = params;
     this.container = createElement(Tags.div, `good-card_${size}`);
     this.size = size;
+    this.buyButton = createElement(Tags.button, `good-card__button`, "Купить");
+    this.descriptionButton = createElement(Tags.button, `good-card__button`, "Описание");
   }
 
   private append() {
@@ -24,9 +25,19 @@ export class Good {
     image.alt = this.params.title;
     const price = createElement(Tags.p, `good-card__price_${this.size}`, `от ${this.params.price} руб.`);
     const name = createElement(Tags.p, `good-card__title_${this.size}`, this.params.title);
-    const buyButton = createElement(Tags.button, `good-card__button`, "Купить");
-    const descriptionButton = createElement(Tags.button, `good-card__button`, "Описание");
-    this.container.append(image, price, name, buyButton, descriptionButton);
+    this.container.append(image, price, name, this.buyButton, this.descriptionButton);
+  }
+
+  public addListeners() {
+    this.descriptionButton.addEventListener("click", this.handelClickToDescription);
+  }
+
+  private handelClickToDescription = () => {
+    window.location.href = `/goods?id=${this.params.id}`;
+  };
+
+  public removeListeners() {
+    this.descriptionButton.removeEventListener("click", this.handelClickToDescription);
   }
 
   public render() {
@@ -40,7 +51,9 @@ export class GoodList {
   private state: Array<IGood> | [];
   private container;
   private size = "small";
-  public subscribers: Array<{ obj: CheckBoxInFilter | SliderFilter | SortSection; visit: boolean; type: string }> = [];
+  private urlHandler = new UrlHandler();
+  private parmName = "iconsSize";
+  private renderArr: Good[] = [];
   constructor() {
     this.container = createElement(Tags.div, "home__good-list");
     this.state = [];
@@ -48,14 +61,11 @@ export class GoodList {
 
   public setSize(params: string) {
     this.size = params;
+    this.urlHandler.insertParam(this.parmName, params);
   }
 
   get getState() {
     return this.state;
-  }
-
-  public setSubscribers(subscriber: { obj: CheckBoxInFilter | SliderFilter | SortSection; visit: boolean; type: string }) {
-    this.subscribers.push(subscriber);
   }
 
   static getInstance() {
@@ -72,14 +82,22 @@ export class GoodList {
   }
 
   private fill(data: Array<IGood> | []) {
-    data.forEach((elem) => this.container.appendChild(new Good(elem, this.size).render()));
+    data.forEach((elem) => {
+      const element = new Good(elem, this.size);
+      element.addListeners();
+      this.renderArr.push(element);
+      this.container.appendChild(element.render());
+    });
   }
 
   private clear() {
+    this.renderArr.forEach((element) => element.removeListeners());
     this.container.innerHTML = "";
   }
 
   public render() {
+    const size = this.urlHandler.searchParams(this.parmName);
+    if (size) this.setSize(size);
     this.updateRender(goods.products);
     return this.container;
   }

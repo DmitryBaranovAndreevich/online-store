@@ -8,6 +8,8 @@ import { brands, categories, createElement } from "../service";
 import { GoodList } from "../components/goodsList/goodsList";
 import { SortSection } from "../components/sortSection/sortSection";
 import { Tags } from "../interface/tags";
+import { UrlHandler } from "../service/urlHandler";
+import { SortElements } from "../service/sortElements";
 
 const testArr = [
   { name: "Бренд", items: brands },
@@ -16,6 +18,7 @@ const testArr = [
 
 class MainPage implements IPage {
   body;
+  private urlHandler = new UrlHandler();
   constructor() {
     this.body = document.querySelector("body") as HTMLElement;
   }
@@ -37,6 +40,7 @@ class MainPage implements IPage {
     const mainContent = createElement("div", "home__main-content");
     this.append(mainContent);
     mainContent.append(filter, wrapper); // добавляем блок с фильтрами
+    if (this.urlHandler.isParams()) SortElements.getInstance().sort();
   }
 }
 

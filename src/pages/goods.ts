@@ -3,7 +3,11 @@ import "./home.css";
 import goodsList from "../components/goods-list";
 import { Header } from "../components/header/header";
 import { createElement } from "../service";
+import { UrlHandler } from "../service/urlHandler";
 
+const urlHandler = new UrlHandler();
+const id = urlHandler.searchParams("id");
+console.log(id); // id товара
 class GoodsCart {
   body;
   constructor() {

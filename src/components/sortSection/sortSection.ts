@@ -2,10 +2,10 @@ import { Tags } from "../../interface/tags";
 import { createElement, generateHash } from "../../service";
 import { FilterObserver } from "../../service/filterObserver";
 import { SortElements } from "../../service/sortElements";
+import { UrlHandler } from "../../service/urlHandler";
 import { Filter } from "../filters/filters";
-// import { GoodList } from "../goodsList/goodsList";
 import { SearchBar } from "../seachBar/searchBar";
-import { SizeButtons } from "../sizeBuutons/sizeButtons";
+import { SizeButtons } from "../sizeButtons/sizeButtons";
 import "./sortSection.css";
 
 export class SortSection {
@@ -13,12 +13,14 @@ export class SortSection {
   private container;
   private filter;
   private label;
+  private urlHandler;
 
   private buttons: Array<HTMLButtonElement> = [];
   constructor(observer = FilterObserver.getInstance()) {
     this.container = createElement(Tags.div, "sort-section");
-    this.filter = new Filter("Сортировка", "absolute");
+    this.filter = new Filter("Сортировка", new UrlHandler(), "absolute");
     this.label = this.filter.title.title;
+    this.urlHandler = new UrlHandler();
     observer.subscribe({ obj: this, visit: false, type: "sort" });
   }
 
@@ -30,6 +32,7 @@ export class SortSection {
     const element = e.target as HTMLButtonElement;
     if (element) {
       this.label.click();
+      this.urlHandler.insertParam(element.id, "checked");
       this.updateText(element.textContent as string);
       SortElements.getInstance().sort();
     }
@@ -70,6 +73,12 @@ export class SortSection {
     });
     this.filter.addElement(...this.buttons);
     this.container.append(this.filter.render(), serchBar.render(), sizeBar.render());
+    this.buttons.forEach((button) => {
+      if (this.urlHandler.searchParams(button.id)) {
+        button.click();
+        button.click();
+      }
+    });
     return this.container;
   }
 }

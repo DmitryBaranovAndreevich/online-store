@@ -5,26 +5,25 @@ import { Tags } from "../../interface/tags";
 import { IGood } from "../../interface/good";
 import { FilterObserver } from "../../service/filterObserver";
 import { SortElements } from "../../service/sortElements";
+import { UrlHandler } from "../../service/urlHandler";
 
 export class CheckBoxInFilter extends Checkbox {
   private comment;
   private count;
   private allcount;
   private type;
-  private observer;
-  private sorter;
-  constructor(text: string, count: number, type?: string, observer = FilterObserver.getInstance(), sorter = SortElements.getInstance()) {
+  private urlHandler;
+  constructor(text: string, count: number, urlHandler: UrlHandler, type?: string) {
     super(text, "checkBox__input");
     this.count = count;
-    const allCount = sorter.allGoods.filter((el) => Object.values(el).includes(text)).length;
+    const allCount = SortElements.getInstance().allGoods.filter((el) => Object.values(el).includes(text)).length;
     this.allcount = allCount;
     const comment = createElement(Tags.p, `numbers_${this.hash}`, `${count}/${allCount}`);
     this.comment = comment;
     this.container.appendChild(comment);
     this.type = type;
-    this.sorter = sorter;
-    this.observer = observer;
-    this.observer.subscribe({ obj: this, visit: false, type: this.type as string });
+    this.urlHandler = urlHandler;
+    FilterObserver.getInstance().subscribe({ obj: this, visit: false, type: this.type as string });
   }
 
   public addEventListener() {
@@ -32,7 +31,14 @@ export class CheckBoxInFilter extends Checkbox {
     return this;
   }
 
-  private handelClick = () => {
+  private handelClick = (e: Event) => {
+    const checkbox = e.target as HTMLInputElement;
+    const checked = checkbox.checked;
+    if (checked) {
+      this.urlHandler.insertParam(checkbox.id, String(checked));
+    } else {
+      this.urlHandler.deleteParams(checkbox.id);
+    }
     SortElements.getInstance().sort();
   };
 
