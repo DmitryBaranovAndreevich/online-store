@@ -3,6 +3,7 @@ import { Tags } from "../../interface/tags";
 import { createElement, generateHash, goods } from "../../service";
 import { FilterObserver } from "../../service/filterObserver";
 import { SortElements } from "../../service/sortElements";
+import { UrlHandler } from "../../service/urlHandler";
 import "./sliderFilter.css";
 
 export class SliderFilter {
@@ -22,12 +23,14 @@ export class SliderFilter {
   allCount;
   count = 0;
   englishName;
+  urlHandler;
 
   constructor(
     name: string,
     englishName: string,
     min: string,
     max: string,
+    urlHandler: UrlHandler,
     allGoods = goods,
     observer: FilterObserver = FilterObserver.getInstance(),
     sorter = SortElements.getInstance()
@@ -49,6 +52,7 @@ export class SliderFilter {
     this.englishName = englishName as keyof IGood;
     this.observer = observer;
     this.sorter = sorter;
+    this.urlHandler = urlHandler;
     observer.subscribe({ obj: this, visit: false, type: name });
   }
 
@@ -88,6 +92,10 @@ export class SliderFilter {
     this.track.style.background = `linear-gradient(to right, #dadae5 ${percent1}% , #3264fe ${percent1}% , #3264fe ${percent2}%, #dadae5 ${percent2}%)`;
   }
 
+  private setParams(input: HTMLInputElement) {
+    this.urlHandler.insertParam(input.id, input.value);
+  }
+
   private leftSlider = () => {
     const minGap = 0;
     if (parseInt(this.rightInput.value) - parseInt(this.leftInput.value) <= minGap) {
@@ -95,6 +103,7 @@ export class SliderFilter {
     }
     this.leftSpan.textContent = `от ${this.leftInput.value}`;
     this.fillColor();
+    this.setParams(this.leftInput);
     this.sorter.sort();
   };
 
@@ -105,6 +114,7 @@ export class SliderFilter {
     }
     this.rightSpan.textContent = `до ${this.rightInput.value}`;
     this.fillColor();
+    this.setParams(this.rightInput);
     this.sorter.sort();
   };
 
@@ -116,8 +126,15 @@ export class SliderFilter {
     return sliderContainer;
   }
 
+  private setInputValue(input: HTMLInputElement) {
+    const param = this.urlHandler.searchParams(input.id);
+    if (param) input.value = param;
+  }
+
   render() {
     this.container.append(this.createSpanContainer(), this.createSlider(), this.createResultsContainer());
+    this.setInputValue(this.leftInput);
+    this.setInputValue(this.rightInput);
     this.leftSlider();
     this.rightSlider();
     return this.container;

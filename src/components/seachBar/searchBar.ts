@@ -4,11 +4,14 @@ import { createElement } from "../../service";
 import { IComponent } from "../../interface/component";
 import { SortElements } from "../../service/sortElements";
 import { FilterObserver } from "../../service/filterObserver";
+import { UrlHandler } from "../../service/urlHandler";
 
 export class SearchBar implements IComponent {
   container;
   private input;
   private button;
+  private urlHandler = new UrlHandler();
+  private paramName = "textInputElement";
   constructor() {
     this.container = createElement(Tags.form, "search-bar");
     this.input = createElement(Tags.input, "search-bar__input") as HTMLInputElement;
@@ -22,8 +25,10 @@ export class SearchBar implements IComponent {
     e.preventDefault();
     const text = this.input.value;
     const sorter = SortElements.getInstance();
-    if (text !== "") sorter.search(text);
-    else sorter.sort();
+    if (text !== "") {
+      sorter.search(text);
+      this.urlHandler.insertParam(this.paramName, text);
+    } else sorter.sort();
   };
 
   private addListeners() {
@@ -32,8 +37,10 @@ export class SearchBar implements IComponent {
   }
 
   public render() {
+    const param = this.urlHandler.searchParams(this.paramName);
     this.container.append(this.input, this.button);
     this.addListeners();
+    if (param) this.input.value = param;
     return this.container;
   }
 }
