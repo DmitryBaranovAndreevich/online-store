@@ -33,9 +33,10 @@ export class SortElements {
     this.types.push(type);
   }
 
-  sort() {
+  sort(startArr?: Array<IGood>) {
     const visitType: string[] = [];
-    this.state = this.data;
+    if (!startArr) this.state = this.data;
+    else this.state = startArr;
     const sliders = this.observer.getSubscribers.filter(({ obj }) => obj instanceof SliderFilter); //ищем фильтры-слайдеры
     const sorts = this.observer.getSubscribers.find(({ obj }) => obj instanceof SortSection); //ищем сортировочный чекбокс
     this.types.forEach((types) => {
@@ -70,26 +71,22 @@ export class SortElements {
     );
   }
 
-  public falueSort(text: string) {
+  private falueSort(text: string) {
     switch (text) {
       case "По возрастанию цены":
         this.falueSortHelper("price", "down");
-        // this.label.textContent = "По возрастанию цены";
         break;
 
       case "По убыванию цены":
         this.falueSortHelper("price", "up");
-        // this.label.textContent = "По убыванию цены";
         break;
 
       case "По возрастанию рейтинга":
         this.falueSortHelper("rating", "down");
-        // this.label.textContent = "По возрастанию рейтинга";
         break;
 
       case "По убыванию рейтинга":
         this.falueSortHelper("rating", "up");
-        // this.label.textContent = "По убыванию рейтинга";
         break;
 
       case "Сортировка":
@@ -101,5 +98,19 @@ export class SortElements {
     const sortArr = this.state.sort((a, b) => a[type] - b[type]);
     if (direction === "up") this.state = sortArr.reverse();
     this.state = sortArr;
+  }
+
+  public search(text: string) {
+    this.state = this.data;
+    this.state = this.state.filter((good) =>
+      (
+        Object.values(good).reduce((priv, property) => {
+          const privToArr = Array.isArray(priv) ? priv : String(priv).split(" ");
+          const proprtyToArr = Array.isArray(property) ? property : String(property).split(" ");
+          return [...privToArr, ...proprtyToArr];
+        }, []) as string[]
+      ).includes(text)
+    );
+    this.sort(this.state);
   }
 }

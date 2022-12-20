@@ -4,12 +4,14 @@ import { SliderFilter } from "../components/sliderFilter/sliderFilter";
 import { SortSection } from "../components/sortSection/sortSection";
 import { IGood } from "../interface/good";
 import { goods } from "./goods";
+import { SortElements } from "./sortElements";
 
 export class FilterObserver {
   private static instance: FilterObserver | null = null;
   private view = GoodList.getInstance();
   private listeners: Array<{ obj: CheckBoxInFilter | SliderFilter | SortSection; type: string; visit: boolean }>;
   private data;
+  private input: HTMLInputElement | null = null;
   constructor(data: Array<IGood>) {
     this.data = data;
     this.listeners = [];
@@ -32,8 +34,25 @@ export class FilterObserver {
     return this;
   }
 
+  set textInput(input: HTMLInputElement) {
+    this.input = input;
+  }
+
   get getSubscribers() {
     return this.listeners;
+  }
+
+  public setIconsSize(size: string) {
+    GoodList.getInstance().setSize(size);
+    const sorter = SortElements.getInstance();
+    if (this.input) {
+      const text = this.input.value;
+      if (text !== "") {
+        sorter.search(text);
+      } else sorter.sort();
+    } else {
+      sorter.sort();
+    }
   }
 
   public notify() {

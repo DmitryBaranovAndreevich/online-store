@@ -1,9 +1,12 @@
 import "./searchBar.css";
 import { Tags } from "../../interface/tags";
 import { createElement } from "../../service";
+import { IComponent } from "../../interface/component";
+import { SortElements } from "../../service/sortElements";
+import { FilterObserver } from "../../service/filterObserver";
 
-export class SearchBar {
-  private container;
+export class SearchBar implements IComponent {
+  container;
   private input;
   private button;
   constructor() {
@@ -12,17 +15,25 @@ export class SearchBar {
     this.input.type = "text";
     this.button = createElement(Tags.button, "search-bar__button", "Поиск") as HTMLButtonElement;
     this.button.type = "submit";
+    FilterObserver.getInstance().textInput = this.input;
   }
 
   private handelClick = (e: Event) => {
     e.preventDefault();
     const text = this.input.value;
-    console.log(text);
+    const sorter = SortElements.getInstance();
+    if (text !== "") sorter.search(text);
+    else sorter.sort();
   };
+
+  private addListeners() {
+    this.container.addEventListener("submit", (e) => e.preventDefault());
+    this.input.addEventListener("input", this.handelClick);
+  }
 
   public render() {
     this.container.append(this.input, this.button);
-    this.container.addEventListener("submit", this.handelClick);
+    this.addListeners();
     return this.container;
   }
 }

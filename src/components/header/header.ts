@@ -6,7 +6,7 @@ import "./header.css";
 
 export class Header {
   private static instance: Header | null = null;
-  private htmlPattern = document.createElement("header");
+  private container = document.createElement("header");
   private isRender = false;
   private logo;
   private elements;
@@ -32,27 +32,17 @@ export class Header {
   public render() {
     if (!this.isRender) {
       this.isRender = true;
-      this.htmlPattern.className = "header";
-      this.logo.render(this.htmlPattern);
+      this.container.className = "header";
+      this.logo.render(this.container);
       const buttonsContainer = document.createElement("div");
       buttonsContainer.className = "header__buttons-container";
-      // const basket = document.createElement("div");
-      // basket.className = "header__basket";
-      this.addElements(buttonsContainer);
-      // buttonsContainer.appendChild(basket);
-      this.addElement(buttonsContainer);
-      this.addElement(buttonsContainer);
+      buttonsContainer.append(...this.elements);
+      this.addElement(buttonsContainer, buttonsContainer);
     }
-    return this.htmlPattern;
+    return this.container;
   }
 
-  public addElement(element: HTMLElement) {
-    this.htmlPattern.appendChild(element);
-  }
-
-  private addElements(container: HTMLElement) {
-    if (this.elements) {
-      this.elements.forEach((element) => container.appendChild(element));
-    }
+  public addElement(...element: HTMLElement[]) {
+    this.container.append(...element);
   }
 }
