@@ -3,6 +3,7 @@ import { Tags } from "../../interface/tags";
 import { createElement } from "../../service";
 import { IComponent } from "../../interface/component";
 import { SortElements } from "../../service/sortElements";
+import { FilterObserver } from "../../service/filterObserver";
 
 export class SearchBar implements IComponent {
   container;
@@ -14,6 +15,7 @@ export class SearchBar implements IComponent {
     this.input.type = "text";
     this.button = createElement(Tags.button, "search-bar__button", "Поиск") as HTMLButtonElement;
     this.button.type = "submit";
+    FilterObserver.getInstance().textInput = this.input;
   }
 
   private handelClick = (e: Event) => {

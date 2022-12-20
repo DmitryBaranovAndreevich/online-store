@@ -36,7 +36,7 @@ export class Header {
       this.logo.render(this.container);
       const buttonsContainer = document.createElement("div");
       buttonsContainer.className = "header__buttons-container";
-      this.container.append(...this.elements);
+      buttonsContainer.append(...this.elements);
       this.addElement(buttonsContainer, buttonsContainer);
     }
     return this.container;

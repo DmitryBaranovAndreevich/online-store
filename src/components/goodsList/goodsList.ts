@@ -11,19 +11,21 @@ import { SortSection } from "../sortSection/sortSection";
 export class Good {
   private params;
   private container;
-  constructor(params: IGood) {
+  private size;
+  constructor(params: IGood, size: string) {
     this.params = params;
-    this.container = createElement(Tags.div, "good-card");
+    this.container = createElement(Tags.div, `good-card_${size}`);
+    this.size = size;
   }
 
   private append() {
-    const image = createElement(Tags.img, "good-card__image") as HTMLImageElement;
+    const image = createElement(Tags.img, `good-card__image_${this.size}`) as HTMLImageElement;
     image.src = this.params.thumbnail;
     image.alt = this.params.title;
-    const price = createElement(Tags.p, "good-card__price", `от ${this.params.price} руб.`);
-    const name = createElement(Tags.p, "good-card__title", this.params.title);
-    const buyButton = createElement(Tags.button, "good-card__button", "Купить");
-    const descriptionButton = createElement(Tags.button, "good-card__button", "Описание");
+    const price = createElement(Tags.p, `good-card__price_${this.size}`, `от ${this.params.price} руб.`);
+    const name = createElement(Tags.p, `good-card__title_${this.size}`, this.params.title);
+    const buyButton = createElement(Tags.button, `good-card__button`, "Купить");
+    const descriptionButton = createElement(Tags.button, `good-card__button`, "Описание");
     this.container.append(image, price, name, buyButton, descriptionButton);
   }
 
@@ -37,10 +39,15 @@ export class GoodList {
   private static instance: GoodList | null = null;
   private state: Array<IGood> | [];
   private container;
+  private size = "small";
   public subscribers: Array<{ obj: CheckBoxInFilter | SliderFilter | SortSection; visit: boolean; type: string }> = [];
   constructor() {
     this.container = createElement(Tags.div, "home__good-list");
     this.state = [];
+  }
+
+  public setSize(params: string) {
+    this.size = params;
   }
 
   get getState() {
@@ -65,7 +72,7 @@ export class GoodList {
   }
 
   private fill(data: Array<IGood> | []) {
-    data.forEach((elem) => this.container.appendChild(new Good(elem).render()));
+    data.forEach((elem) => this.container.appendChild(new Good(elem, this.size).render()));
   }
 
   private clear() {

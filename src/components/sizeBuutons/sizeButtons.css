@@ -1,8 +1,28 @@
 .size-bar {
-  padding: 34px 10px;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding: 26px 10px;
   box-shadow: var(--shadow);
 }
 
 .size-bar__button {
-  
+  width: 50px;
+  height: 30px;
+ border: none;
+ box-shadow: var(--shadow);
+ transition: opacity .3s;
+}
+
+.size-bar__button_big {
+  background: url(../../images/icons/button-size-big.png) no-repeat center/contain;
+}
+
+.size-bar__button_small {
+  background: url(../../images/icons/button-size-midle.png) no-repeat center/contain;
+}
+
+.size-bar__button:hover{
+  cursor: pointer;
+  opacity: .5;
 }
