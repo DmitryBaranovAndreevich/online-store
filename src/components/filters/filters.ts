@@ -50,10 +50,11 @@ export class Filter {
 
   private openMenu = (e: Event) => {
     e.preventDefault();
+    this.checkBox.checkbox.checked = !this.checkBox.checkbox.checked;
     const elem = e.target as HTMLInputElement;
-    const param = this.urlHandler.searchParams(this.checkBox.label.id);
-    if (param) this.urlHandler.deleteParams(this.checkBox.label.id);
-    else this.urlHandler.insertParam(this.checkBox.label.id, "checked");
+    const param = this.urlHandler.searchParams(this.checkBox.checkbox.id);
+    if (param) this.urlHandler.deleteParams(this.checkBox.checkbox.id);
+    else this.urlHandler.insertParam(this.checkBox.checkbox.id, "checked");
 
     if (elem.classList.contains("accordion-item__input-trigger")) {
       const parent = elem.closest(".accordion-item");
@@ -81,8 +82,8 @@ export class Filter {
   }
 
   private checkActive() {
-    const param = this.urlHandler.searchParams(this.checkBox.label.id);
-    if (param) this.checkBox.label.click();
+    const param = this.urlHandler.searchParams(this.checkBox.checkbox.id);
+    if (param) this.checkBox.label.closest(".accordion-item")?.querySelector(".menu-item")?.classList.add("menu-item_active");
   }
 
   public render() {
