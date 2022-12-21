@@ -16,6 +16,7 @@ export class SearchBar implements IComponent {
     this.container = createElement(Tags.form, "search-bar");
     this.input = createElement(Tags.input, "search-bar__input") as HTMLInputElement;
     this.input.type = "text";
+    this.input.name = "searchText";
     this.button = createElement(Tags.button, "search-bar__button", "Поиск") as HTMLButtonElement;
     this.button.type = "submit";
     FilterObserver.getInstance().textInput = this.input;
