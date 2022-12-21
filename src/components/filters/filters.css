@@ -59,6 +59,8 @@
 }
 
 .menu-item {
+  position: relative;
+  z-index: 2;
   padding: 0;
   margin: 0;
   border: none;

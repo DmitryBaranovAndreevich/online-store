@@ -12,7 +12,7 @@ export class SortSection {
   private buttonsNames = ["По возрастанию цены", "По убыванию цены", "По возрастанию рейтинга", "По убыванию рейтинга"];
   private container;
   private filter;
-  private label;
+  public label;
   private urlHandler;
 
   private buttons: Array<HTMLButtonElement> = [];

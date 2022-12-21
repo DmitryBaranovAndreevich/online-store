@@ -50,12 +50,14 @@ export class GoodList {
   private static instance: GoodList | null = null;
   private state: Array<IGood> | [];
   private container;
+  private text;
   private size = "small";
   private urlHandler = new UrlHandler();
   private parmName = "iconsSize";
   private renderArr: Good[] = [];
   constructor() {
-    this.container = createElement(Tags.div, "home__good-list");
+    this.container = createElement(Tags.div, "home__good-list") as HTMLDivElement;
+    this.text = createElement(Tags.p, "home__good-list-text");
     this.state = [];
   }
 
@@ -82,6 +84,8 @@ export class GoodList {
   }
 
   private fill(data: Array<IGood> | []) {
+    this.container.append(this.text);
+    this.text.textContent = `Всего: ${data.length}`;
     data.forEach((elem) => {
       const element = new Good(elem, this.size);
       element.addListeners();
@@ -95,10 +99,15 @@ export class GoodList {
     this.container.innerHTML = "";
   }
 
+  private setContent() {
+    this.container.style.setProperty("--text", `Всего: ${this.renderArr.length}`);
+  }
+
   public render() {
     const size = this.urlHandler.searchParams(this.parmName);
     if (size) this.setSize(size);
     this.updateRender(goods.products);
+    this.setContent();
     return this.container;
   }
 }
