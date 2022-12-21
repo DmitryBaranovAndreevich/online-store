@@ -1,6 +1,6 @@
 export interface IGood {
   id: number;
-  title: string,
+  title: string;
   description: string;
   price: number;
   discountPercentage: number;
@@ -9,5 +9,5 @@ export interface IGood {
   brand: string;
   category: string;
   thumbnail: string;
-  images: Array<string>
+  images: Array<string>;
 }
