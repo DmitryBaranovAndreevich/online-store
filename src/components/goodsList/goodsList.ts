@@ -85,7 +85,7 @@ export class GoodList {
 
   private fill(data: Array<IGood> | []) {
     this.container.append(this.text);
-    this.text.textContent = `Всего: ${data.length}`;
+    this.text.textContent = data.length ? `Всего: ${data.length}` : "Товаров не найдено";
     data.forEach((elem) => {
       const element = new Good(elem, this.size);
       element.addListeners();
