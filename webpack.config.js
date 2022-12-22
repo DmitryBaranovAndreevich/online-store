@@ -8,7 +8,7 @@ module.exports = {
   entry: {
     "/": "./src/pages/index.ts",
     main: "./src/pages/home.ts",
-    test: "./src/pages/test.ts",
+    popup: "./src/pages/popup.ts",
     goods: "./src/pages/goods.ts",
     cart: "./src/pages/cart.ts",
   },

@@ -1,0 +1,38 @@
+.popup {
+  position: relative;
+  display: flex;
+  flex-direction: column-reverse;
+  justify-content: flex-end;
+  align-items: center;
+  width: 60%;
+  height: 400px;
+  box-shadow: var(--shadow);
+  background: rgba(141, 124, 124, 0.6);
+  border-radius: 16px;
+  padding: 0 150px;
+  box-sizing: border-box;
+  color: #fff;
+}
+
+.popup__close-button {
+  position: absolute;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  border: none;
+  background: url(../../images/сlose-icon.svg) no-repeat center/cover;
+  right: -30px;
+  top: -30px;
+  transition: .2s;
+}
+
+.popup__close-button:hover {
+  cursor: pointer;
+  opacity: .6
+}
+
+.popup__title {
+  font-size: 32px;
+  color: #fff;
+  margin: 10px 0 30px;
+}
