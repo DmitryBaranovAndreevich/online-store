@@ -5,13 +5,13 @@
   justify-content: flex-end;
   align-items: center;
   width: 60%;
-  height: 400px;
   box-shadow: var(--shadow);
   background: rgba(141, 124, 124, 0.6);
   border-radius: 16px;
   padding: 0 150px;
   box-sizing: border-box;
   color: #fff;
+  padding-bottom: 40px;
 }
 
 .popup__close-button {

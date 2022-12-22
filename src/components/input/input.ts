@@ -28,6 +28,7 @@ export class Input implements IInput {
     this.input.type = this.type;
     this.input.id = `input__${generateHash(this.name)}`;
     this.input.required = true;
+    this.input.formNoValidate = true;
     this.label.htmlFor = `input__${generateHash(this.name)}`;
     this.label.id = `label__${generateHash(this.name)}`;
     this.container.append(this.label, this.input, this.span);
@@ -58,15 +59,17 @@ export class Input implements IInput {
   }
 
   public addValid() {
-    return false;
+    return true;
   }
 
   isValid = () => {
-    if (!this.addValid() && !this.validateName()) {
-      this.showInputError();
-    } else {
+    if (this.addValid() && this.validateName()) {
       this.hideInputError();
+    } else {
+      this.showInputError();
     }
+
+    if (this.input.value === "") this.hideInputError();
   };
 
   private addListeners() {

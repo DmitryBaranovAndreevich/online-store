@@ -8,9 +8,10 @@ export class NumberInputDecorator {
   isValid() {
     this.component.addValid = function () {
       const number = this.input.value;
-      if (number[0] !== "+") return true;
-      for (let i = 1; i < number.length; i++) {
-        if (Number(i) < 0 || Number(i) > 9) return true;
+      if (number[0] === "+") {
+        for (let i = 1; i < number.length; i++) {
+          if (Number(i) >= 0 || Number(i) <= 9) return true;
+        }
       }
       return false;
     };

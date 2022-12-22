@@ -5,6 +5,8 @@ import { Tags } from "../interface/tags";
 import { Popup } from "../components/popup/popup";
 import { Input } from "../components/input/input";
 import { NumberInputDecorator } from "../components/input/numberInput";
+import { EmailInputDecorator } from "../components/input/emailInput";
+import { CreditCardDetails } from "../components/creditCardDetails/creditCardDetails";
 
 export class PopupPage implements IPage {
   body;
@@ -12,7 +14,7 @@ export class PopupPage implements IPage {
 
   constructor() {
     this.body = document.querySelector("body") as HTMLBodyElement;
-    this.container = createElement(Tags.form, "popup-background");
+    this.container = createElement(Tags.div, "popup-background");
   }
 
   append(...node: Array<HTMLElement>) {
@@ -23,7 +25,11 @@ export class PopupPage implements IPage {
     const popup = new Popup("Оформите заказ");
     const inputName = new Input("Ваше имя", "text", 3, 2);
     const inputPhoneNumber = new NumberInputDecorator(new Input("Номер телефона", "text", 9, 1));
-    popup.append(inputPhoneNumber.render(), inputName.render());
+    const inputAdress = new Input("Адрес доставки", "text", 5, 3);
+    const emailInput = new EmailInputDecorator(new Input("E-mail", "text", 5, 1));
+    const creditCard = new CreditCardDetails();
+    const sendButton = createElement(Tags.button, "popup__button", "Оплатить");
+    popup.append(sendButton, creditCard.render(), emailInput.render(), inputAdress.render(), inputPhoneNumber.render(), inputName.render());
     this.container.append(popup.render());
     this.body?.appendChild(this.container);
   }
