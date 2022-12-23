@@ -16,11 +16,11 @@ class Cart {
 
   construct(): void {
     this.append(Header.getInstance().render());
-    const main: HTMLElement = createElement("div", "main");
-    this.append(main);
+    const cartMain: HTMLElement = createElement("div", "cart__main");
+    this.append(cartMain);
     const products: HTMLElement = createElement("section", "products");
     const summary: HTMLElement = createElement("section", "summary");
-    main.append(products, summary);
+    cartMain.append(products, summary);
     const productsHeader: HTMLElement = createElement("div", "products__header");
     productsHeader.textContent = "Products in Cart";
     const productsField: HTMLElement = createElement("div", "products__field");
@@ -70,7 +70,8 @@ class Cart {
             yyy();
             if (amount < 1) {
               productsField.removeChild(productsItem);
-              storageSet.splice(choosenItem.id, 1);
+              const id = choosenItem.id;
+              storageSet.splice(id, 1);
               localStorage.setItem("item", storageSet.toString());
               console.log(storageSet);
               for (let j = 0; j < productsField.children.length; j++) {
