@@ -4,6 +4,8 @@ import { Tags } from "../../interface/tags";
 import { createElement, goods } from "../../service";
 import { UrlHandler } from "../../service/urlHandler";
 
+export const cartArray: number[] = [];
+
 export class Good {
   private params;
   private container;
@@ -29,8 +31,14 @@ export class Good {
   }
 
   public addListeners() {
+    this.buyButton.addEventListener("click", this.handelClickToCart);
     this.descriptionButton.addEventListener("click", this.handelClickToDescription);
   }
+
+  private handelClickToCart = () => {
+    cartArray.push(this.params.id);
+    localStorage.setItem("item", cartArray.toString());
+  };
 
   private handelClickToDescription = () => {
     window.location.href = `/goods?id=${this.params.id}`;
