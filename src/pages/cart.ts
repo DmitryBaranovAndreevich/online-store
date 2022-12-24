@@ -5,9 +5,7 @@ import { Header } from "../components/header/header";
 import { createElement } from "../service";
 import { IGood } from "../interface/good";
 
-const goodsArr: IGood[] = goods.products;
-
-class Cart {
+export class Cart {
   body;
   constructor() {
     this.body = document.querySelector("body") as HTMLElement;

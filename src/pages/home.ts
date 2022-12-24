@@ -16,7 +16,7 @@ const testArr = [
   { name: "Тип", items: categories },
 ];
 
-class MainPage implements IPage {
+export class MainPage implements IPage {
   body;
   private urlHandler = new UrlHandler();
   constructor() {

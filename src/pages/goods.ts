@@ -11,7 +11,8 @@ const id = urlHandler.searchParams("id");
 const goodsArr: IGood[] = goods.products;
 const selectedItem: IGood | undefined = goodsArr.find((item) => item.id === +id);
 console.log(id); // id товара
-class GoodsCart {
+console.log("test");
+export class GoodsCart {
   body;
   constructor() {
     this.body = document.querySelector("body") as HTMLElement;
