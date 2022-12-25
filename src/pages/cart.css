@@ -2,7 +2,7 @@
     --shadow: 0 0 4px hsl(225deg 9% 91% / 60%), 0 4px 16px hsl(225deg 9% 91% / 60%);
   }
 
-.main {
+.cart__main {
     display: flex;
     justify-content: space-between;
     max-width: var(--max-width);

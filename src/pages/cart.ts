@@ -1,9 +1,11 @@
 import "./cart.css";
 import "./home.css";
+import { goods } from "../service";
 import { Header } from "../components/header/header";
 import { createElement } from "../service";
-import { goodsArr } from "./goods";
 import { IGood } from "../interface/good";
+
+const goodsArr: IGood[] = goods.products;
 
 class Cart {
   body;
@@ -25,9 +27,9 @@ class Cart {
     productsHeader.textContent = "Products in Cart";
     const productsField: HTMLElement = createElement("div", "products__field");
     products.append(productsHeader, productsField);
-    const storageSet: string[] | undefined = localStorage.getItem("item")?.split(",");
+    const storageSet: string[] | undefined = JSON.parse(localStorage.getItem("item") as string) as string[] | undefined;
     console.log(storageSet);
-    if (storageSet !== undefined) {
+    if (storageSet) {
       for (let i = 0; i < storageSet.length; i++) {
         const choosenItem: IGood | undefined = goodsArr.find((item) => item.id === +storageSet[i]);
         let amount = 1;
@@ -69,11 +71,14 @@ class Cart {
             fullPriceDigit = 0;
             yyy();
             if (amount < 1) {
-              productsField.removeChild(productsItem);
+              let storageSet: string[] | undefined = JSON.parse(localStorage.getItem("item") as string) as string[] | undefined;
               const id = choosenItem.id;
-              storageSet.splice(id, 1);
-              localStorage.setItem("item", storageSet.toString());
-              console.log(storageSet);
+              if (storageSet) {
+                const removeItem = storageSet.filter((el) => +el !== id);
+                localStorage.setItem("item", JSON.stringify(removeItem));
+                storageSet = JSON.parse(localStorage.getItem("item") as string) as string[] | undefined;
+              }
+              productsField.removeChild(productsItem);
               for (let j = 0; j < productsField.children.length; j++) {
                 productsField.children[j].children[0].textContent = (j + 1).toString();
               }
