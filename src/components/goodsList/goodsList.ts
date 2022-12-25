@@ -4,7 +4,7 @@ import { Tags } from "../../interface/tags";
 import { createElement, goods } from "../../service";
 import { UrlHandler } from "../../service/urlHandler";
 
-export const cartArray: number[] = [];
+let cartArray: number[] = [];
 
 export class Good {
   private params;
@@ -36,8 +36,16 @@ export class Good {
   }
 
   private handelClickToCart = () => {
-    cartArray.push(this.params.id);
-    localStorage.setItem("item", cartArray.toString());
+    if (cartArray) {
+      if (localStorage.getItem("item") !== null) {
+        cartArray = (JSON.parse(localStorage.getItem("item") as string) as string[]).map((el) => +el);
+      } else {
+        cartArray = [];
+      }
+      cartArray.push(this.params.id);
+      console.log(cartArray);
+    }
+    localStorage.setItem("item", JSON.stringify(cartArray));
   };
 
   private handelClickToDescription = () => {
