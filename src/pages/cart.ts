@@ -7,6 +7,11 @@ import { IGood } from "../interface/good";
 
 const goodsArr: IGood[] = goods.products;
 
+interface IArray {
+  id: number;
+  volume: number;
+}
+
 class Cart {
   body;
   constructor() {
@@ -27,14 +32,14 @@ class Cart {
     productsHeader.textContent = "Products in Cart";
     const productsField: HTMLElement = createElement("div", "products__field");
     products.append(productsHeader, productsField);
-    const storageSet: string[] | undefined = JSON.parse(localStorage.getItem("item") as string) as string[] | undefined;
+    const storageSet = JSON.parse(localStorage.getItem("item") as string) as IArray[];
     console.log(storageSet);
     if (storageSet) {
       for (let i = 0; i < storageSet.length; i++) {
-        const choosenItem: IGood | undefined = goodsArr.find((item) => item.id === +storageSet[i]);
-        let amount = 1;
+        const choosenItem: IGood | undefined = goodsArr.find((item) => item.id === storageSet[i].id);
+        let amount: number = storageSet[i].volume;
         if (choosenItem !== undefined) {
-          let price = choosenItem.price;
+          const price = choosenItem.price;
           const productsItem: HTMLElement = createElement("div", "products__item");
           productsField.append(productsItem);
           const itemNumber: HTMLElement = createElement("div", "item__number");
@@ -46,7 +51,7 @@ class Cart {
           const itemInfo: HTMLElement = createElement("div", "item__info");
           itemInfo.textContent = choosenItem.description;
           const itemPrice: HTMLElement = createElement("div", "item__price");
-          itemPrice.textContent = price.toString();
+          itemPrice.textContent = (price * amount).toString();
           const itemAmount: HTMLElement = createElement("div", "item__amount");
           productsItem.append(itemNumber, itemPhoto, itemInfo, itemPrice, itemAmount);
           const itemAmountNumber: HTMLElement = createElement("div", "item__amount-number");
@@ -59,25 +64,25 @@ class Cart {
 
           itemAmountPlus.addEventListener("click", () => {
             itemAmountNumber.textContent = (amount = amount + 1).toString();
-            itemPrice.textContent = (price += choosenItem.price).toString();
+            storageSet[i].volume += 1;
+            itemPrice.textContent = (price * amount).toString();
+            localStorage.setItem("item", JSON.stringify(storageSet));
             fullAmountDigit = 0;
             fullPriceDigit = 0;
             yyy();
           });
           itemAmountMinus.addEventListener("click", () => {
             itemAmountNumber.textContent = (amount = amount - 1).toString();
-            itemPrice.textContent = (price -= choosenItem.price).toString();
+            storageSet[i].volume -= 1;
+            localStorage.setItem("item", JSON.stringify(storageSet));
+            console.log(storageSet);
+            itemPrice.textContent = (price * amount).toString();
             fullAmountDigit = 0;
             fullPriceDigit = 0;
             yyy();
-            if (amount < 1) {
-              let storageSet: string[] | undefined = JSON.parse(localStorage.getItem("item") as string) as string[] | undefined;
-              const id = choosenItem.id;
-              if (storageSet) {
-                const removeItem = storageSet.filter((el) => +el !== id);
-                localStorage.setItem("item", JSON.stringify(removeItem));
-                storageSet = JSON.parse(localStorage.getItem("item") as string) as string[] | undefined;
-              }
+            if (storageSet[i].volume < 1) {
+              storageSet.splice(i, 1);
+              localStorage.setItem("item", JSON.stringify(storageSet));
               productsField.removeChild(productsItem);
               for (let j = 0; j < productsField.children.length; j++) {
                 productsField.children[j].children[0].textContent = (j + 1).toString();
@@ -87,7 +92,6 @@ class Cart {
         }
       }
     }
-    //const itemAmount: HTMLElement = document.querySelector(".item__amount") as HTMLElement;
     const summaryHeader: HTMLElement = createElement("div", "summary__header");
     summaryHeader.textContent = "Summary";
     const summaryField: HTMLElement = createElement("div", "summary__field");
