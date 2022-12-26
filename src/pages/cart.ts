@@ -12,7 +12,7 @@ interface IArray {
   volume: number;
 }
 
-class Cart {
+export class Cart {
   body;
   constructor() {
     this.body = document.querySelector("body") as HTMLElement;
