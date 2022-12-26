@@ -6,7 +6,7 @@ const EslingPlugin = require("eslint-webpack-plugin");
 
 module.exports = {
   entry: {
-    "/": "./src/pages/index.ts",
+    start: "./src/pages/index.ts",
     main: "./src/pages/home.ts",
     popup: "./src/pages/popup.ts",
     goods: "./src/pages/goods.ts",
@@ -41,10 +41,6 @@ module.exports = {
       {
         test: /\.(png|svg|jpg|gif|woff(2)?|eot|ttf|otf)$/,
         type: "asset/resource",
-        // loader: "file-loader",
-        // options: {
-        //   name: "[name].[ext]",
-        // },
       },
       {
         test: /\.css$/,
