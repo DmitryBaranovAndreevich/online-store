@@ -15,6 +15,21 @@
   padding: 30px 10px;
 }
 
+.good-card_disabled {
+  position: relative;
+}
+
+.good-card_disabled:before {
+  position: absolute;
+  content: "Добавлено в корзину";
+  color: red;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  background: rgba(0, 0, 0, .4);
+}
+
 .good-card_big {
   max-width: 289px;
   max-height: 300px;
