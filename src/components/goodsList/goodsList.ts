@@ -41,7 +41,9 @@ export class Good {
   }
 
   private handelClickToCart = () => {
-    cartArray = JSON.parse(localStorage.getItem("item") as string) as IArray[];
+    cartArray = (JSON.parse(localStorage.getItem("item") as string) as IArray[])
+      ? (JSON.parse(localStorage.getItem("item") as string) as IArray[])
+      : [];
     cartArray.push({ id: this.params.id, volume: 1 });
     for (let i = 0; i < cartArray.length; i++) {
       for (let j = 0; j < cartArray.length; j++)
