@@ -4,119 +4,142 @@ import { goods } from "../service";
 import { Header } from "../components/header/header";
 import { createElement } from "../service";
 import { IGood } from "../interface/good";
+import { CartObserver } from "../service/cartObserver";
 
-const goodsArr: IGood[] = goods.products;
+class CartGood {
+  private chosenItem;
+  public index;
+  private price;
+  private productsItem;
+  private itemNumber;
+  private itemPhoto;
+  private itemInfo;
+  private itemPrice;
+  private itemAmount;
+  private itemAmountNumber;
+  private itemAmountButtons;
+  private itemPlus;
+  private itemMinus;
+  private observer: CartObserver;
 
-interface IArray {
-  id: number;
-  volume: number;
+  constructor(chosenItem: IGood, index: number, observer: CartObserver) {
+    this.chosenItem = chosenItem;
+    this.index = index;
+    this.price = chosenItem.price;
+    this.productsItem = createElement("div", "products__item");
+    this.itemNumber = createElement("div", "item__number");
+    this.itemPhoto = createElement("div", "item__photo");
+    this.itemInfo = createElement("p", "item__info", chosenItem.title);
+    this.itemPrice = createElement("p", "item__price", String(chosenItem.price));
+    this.itemAmount = createElement("div", "item__amount");
+    this.itemAmountNumber = createElement("p", "item__amount-number", String(chosenItem.volume));
+    this.itemAmountButtons = createElement("div", "item__amount-buttons");
+    this.itemPlus = createElement("button", "item__amount-plus");
+    this.itemMinus = createElement("button", "item__amount-minus");
+    this.observer = observer;
+  }
+
+  private append() {
+    this.itemNumber.textContent = String(this.index);
+    this.itemPhoto.style.backgroundImage = `url(${this.chosenItem.images[0]})`;
+    const amount: number = this.chosenItem.volume as number;
+    this.itemPrice.textContent = (this.price * amount).toString();
+    this.productsItem.append(this.itemNumber, this.itemPhoto, this.itemInfo, this.itemPrice, this.itemAmount);
+    this.itemAmountNumber.textContent = amount.toString();
+    this.itemAmount.append(this.itemAmountNumber, this.itemAmountButtons);
+    this.itemAmountButtons.append(this.itemPlus, this.itemMinus);
+  }
+
+  public cartListeners() {
+    this.itemPlus.addEventListener("click", this.increaseAmount);
+    this.itemMinus.addEventListener("click", this.decreaseAmount);
+  }
+
+  private increaseAmount = () => {
+    this.observer.increase(this.chosenItem.id);
+  };
+
+  private decreaseAmount = () => {
+    this.observer.decrease(this.chosenItem.id);
+  };
+
+  render() {
+    this.cartListeners();
+    this.append();
+    return this.productsItem;
+  }
 }
 
 export class Cart {
   body;
+  private cartItems: Array<IGood> | [];
+  private observer: CartObserver;
+  private productsField;
+  private products: Array<CartGood> = [];
+  private summaryProducts;
+  private summarySum;
   constructor() {
     this.body = document.querySelector("body") as HTMLElement;
+    this.productsField = createElement("div", "products__field") as HTMLDivElement;
+    this.summaryProducts = createElement("p", "summary__products", "Products: 0");
+    this.summarySum = createElement("p", "summary__sum", "Total sum: 0");
+    this.observer = new CartObserver();
+    this.observer.subscribe(this);
+    this.cartItems = this.observer.state
+      ? Array.from(Object.keys(this.observer.state)).map((id) => {
+          const good = goods.products.find((good) => good.id === Number(id)) as IGood;
+          return { ...good, volume: this.observer.state[id] };
+        })
+      : [];
   }
-  append(node: HTMLElement) {
-    this.body.appendChild(node);
+  append(...node: Array<HTMLElement>) {
+    this.body.append(...node);
+  }
+
+  updateRender(data = this.cartItems) {
+    this.clear();
+    data.forEach((el, index) => {
+      const productsItem = new CartGood(el, index + 1, this.observer);
+      this.products.push(productsItem); // чтобы поптом удалить обработчики
+      this.productsField.append(productsItem.render());
+    });
+    const fullPrice = (data as Array<IGood>).reduce((priv, { price, volume }) => priv + price * (volume as number), 0);
+    const fullAmount = (data as Array<IGood>).reduce((priv, { volume }) => priv + (volume as number), 0);
+    this.setPrise(fullAmount, fullPrice);
+  }
+
+  private setPrise(count: number, price: number) {
+    this.summaryProducts.textContent = `Products: ${count}`;
+    this.summarySum.textContent = `Total sum: ${price}`;
+  }
+
+  private clear() {
+    this.productsField.innerHTML = "";
+    // удаляем обработчики
+    this.products = [];
   }
 
   construct(): void {
-    this.append(Header.getInstance().render());
-    const cartMain: HTMLElement = createElement("div", "cart__main");
-    this.append(cartMain);
-    const products: HTMLElement = createElement("section", "products");
-    const summary: HTMLElement = createElement("section", "summary");
-    cartMain.append(products, summary);
-    const productsHeader: HTMLElement = createElement("div", "products__header");
-    productsHeader.textContent = "Products in Cart";
-    const productsField: HTMLElement = createElement("div", "products__field");
-    products.append(productsHeader, productsField);
-    const storageSet = JSON.parse(localStorage.getItem("item") as string) as IArray[];
-    console.log(storageSet);
-    if (storageSet) {
-      for (let i = 0; i < storageSet.length; i++) {
-        const choosenItem: IGood | undefined = goodsArr.find((item) => item.id === storageSet[i].id);
-        let amount: number = storageSet[i].volume;
-        if (choosenItem !== undefined) {
-          const price = choosenItem.price;
-          const productsItem: HTMLElement = createElement("div", "products__item");
-          productsField.append(productsItem);
-          const itemNumber: HTMLElement = createElement("div", "item__number");
-          const parent: ParentNode | null = productsItem.parentNode;
-          const index = Array.prototype.indexOf.call(parent?.children, productsItem);
-          itemNumber.textContent = (index + 1).toString();
-          const itemPhoto: HTMLElement = createElement("div", "item__photo");
-          itemPhoto.style.backgroundImage = `url(${choosenItem.images[0]})`;
-          const itemInfo: HTMLElement = createElement("div", "item__info");
-          itemInfo.textContent = choosenItem.description;
-          const itemPrice: HTMLElement = createElement("div", "item__price");
-          itemPrice.textContent = (price * amount).toString();
-          const itemAmount: HTMLElement = createElement("div", "item__amount");
-          productsItem.append(itemNumber, itemPhoto, itemInfo, itemPrice, itemAmount);
-          const itemAmountNumber: HTMLElement = createElement("div", "item__amount-number");
-          const itemAmountButtons: HTMLElement = createElement("div", "item__amount-buttons");
-          itemAmountNumber.textContent = amount.toString();
-          itemAmount.append(itemAmountNumber, itemAmountButtons);
-          const itemAmountPlus: HTMLElement = createElement("button", "item__amount-plus");
-          const itemAmountMinus: HTMLElement = createElement("button", "item__amount-minus");
-          itemAmountButtons.append(itemAmountPlus, itemAmountMinus);
+    const cartMain = createElement("div", "cart__main");
+    const productsHeader = createElement("p", "products__header", "Products in Cart");
+    const summaryHeader = createElement("p", "summary__header", "Summary");
+    const summaryField = createElement("div", "summary__field");
+    const buyButton = createElement("button", "buy__button", "BUY NOW");
+    this.append(Header.getInstance().render(), cartMain);
 
-          itemAmountPlus.addEventListener("click", () => {
-            itemAmountNumber.textContent = (amount = amount + 1).toString();
-            storageSet[i].volume += 1;
-            itemPrice.textContent = (price * amount).toString();
-            localStorage.setItem("item", JSON.stringify(storageSet));
-            fullAmountDigit = 0;
-            fullPriceDigit = 0;
-            yyy();
-          });
-          itemAmountMinus.addEventListener("click", () => {
-            itemAmountNumber.textContent = (amount = amount - 1).toString();
-            storageSet[i].volume -= 1;
-            localStorage.setItem("item", JSON.stringify(storageSet));
-            console.log(storageSet);
-            itemPrice.textContent = (price * amount).toString();
-            fullAmountDigit = 0;
-            fullPriceDigit = 0;
-            yyy();
-            if (storageSet[i].volume < 1) {
-              storageSet.splice(i, 1);
-              localStorage.setItem("item", JSON.stringify(storageSet));
-              productsField.removeChild(productsItem);
-              for (let j = 0; j < productsField.children.length; j++) {
-                productsField.children[j].children[0].textContent = (j + 1).toString();
-              }
-            }
-          });
-        }
-      }
-    }
-    const summaryHeader: HTMLElement = createElement("div", "summary__header");
-    summaryHeader.textContent = "Summary";
-    const summaryField: HTMLElement = createElement("div", "summary__field");
+    const products = createElement("section", "products");
+    const summary = createElement("section", "summary");
+    cartMain.append(products, summary);
+
+    products.append(productsHeader, this.productsField);
+    this.updateRender();
+
     summary.append(summaryHeader, summaryField);
-    const summaryProducts: HTMLElement = createElement("div", "summary__products");
-    let fullAmountDigit = 0;
-    let fullPriceDigit = 0;
-    summaryProducts.textContent = `Products: ${fullAmountDigit}`;
-    const summarySum: HTMLElement = createElement("div", "summary__sum");
+
     const inputPromo: HTMLInputElement = createElement("input", "input__promo") as HTMLInputElement;
     inputPromo.placeholder = "Enter promo code";
-    const buyButton: HTMLElement = createElement("button", "buy__button");
-    buyButton.textContent = "BUY NOW";
-    summaryField.append(summaryProducts, summarySum, inputPromo, buyButton);
-    function yyy(): void {
-      for (let k = 0; k < productsField.children.length; k++) {
-        const fullAmount = productsField.children[k].children[4].children[0];
-        const fullPrice = productsField.children[k].children[3];
-        fullAmountDigit += Number(fullAmount.textContent);
-        fullPriceDigit += Number(fullPrice.textContent);
-        summaryProducts.textContent = `Products: ${fullAmountDigit}`;
-        summarySum.textContent = `Total sum: ${fullPriceDigit}`;
-      }
-    }
-    window.onload = () => yyy();
+
+    summaryField.append(this.summaryProducts, this.summarySum, inputPromo, buyButton);
   }
 }
 

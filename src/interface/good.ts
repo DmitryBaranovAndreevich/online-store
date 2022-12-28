@@ -10,4 +10,5 @@ export interface IGood {
   category: string;
   thumbnail: string;
   images: Array<string>;
+  volume?: number;
 }
