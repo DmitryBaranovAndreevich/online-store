@@ -3,13 +3,14 @@ import { IGood } from "../../interface/good";
 import { Tags } from "../../interface/tags";
 import { createElement, goods } from "../../service";
 import { UrlHandler } from "../../service/urlHandler";
+import { CartObserver } from "../../service/cartObserver";
 
-interface IArray {
-  id: number;
-  volume: number;
-}
+// interface IArray {
+//   id: number;
+//   volume: number;
+// }
 
-let cartArray: IArray[] = [];
+// let cartArray: IArray[] = [];
 
 export class Good {
   private params;
@@ -17,13 +18,18 @@ export class Good {
   private size;
   private buyButton;
   private descriptionButton;
+  private addClass;
+  private cartObserver;
 
-  constructor(params: IGood, size: string) {
+  constructor(params: IGood, size: string, observer: CartObserver, add = false) {
+    if (add) this.addClass = "good-card_disabled";
+    else this.addClass = "good-card";
     this.params = params;
-    this.container = createElement(Tags.div, `good-card_${size}`);
+    this.container = createElement(Tags.div, `good-card_${size} ${this.addClass}`);
     this.size = size;
     this.buyButton = createElement(Tags.button, `good-card__button`, "Купить");
     this.descriptionButton = createElement(Tags.button, `good-card__button`, "Описание");
+    this.cartObserver = observer;
   }
 
   private append() {
@@ -41,20 +47,7 @@ export class Good {
   }
 
   private handelClickToCart = () => {
-    cartArray = (JSON.parse(localStorage.getItem("item") as string) as IArray[])
-      ? (JSON.parse(localStorage.getItem("item") as string) as IArray[])
-      : [];
-    cartArray.push({ id: this.params.id, volume: 1 });
-    for (let i = 0; i < cartArray.length; i++) {
-      for (let j = 0; j < cartArray.length; j++)
-        if (cartArray[i].id === cartArray[j].id && i !== j) {
-          cartArray[i].volume += 1;
-          cartArray.splice(j, 1);
-          localStorage.setItem("item", JSON.stringify(cartArray));
-        }
-    }
-    console.log(cartArray);
-    localStorage.setItem("item", JSON.stringify(cartArray));
+    this.cartObserver.addElement(this.params.id);
   };
 
   private handelClickToDescription = () => {
@@ -80,10 +73,13 @@ export class GoodList {
   private urlHandler = new UrlHandler();
   private parmName = "iconsSize";
   private renderArr: Good[] = [];
+  private cartObserver = new CartObserver();
   constructor() {
     this.container = createElement(Tags.div, "home__good-list") as HTMLDivElement;
     this.text = createElement(Tags.p, "home__good-list-text");
     this.state = [];
+    this.cartObserver = new CartObserver();
+    this.cartObserver.subscribe(this);
   }
 
   public setSize(params: string) {
@@ -103,16 +99,20 @@ export class GoodList {
     return GoodList.instance;
   }
 
-  public updateRender(data: Array<IGood> | []) {
+  public updateRender(data = this.getState) {
     this.clear();
     this.fill(data);
   }
 
   private fill(data: Array<IGood> | []) {
+    this.state = data;
     this.container.append(this.text);
     this.text.textContent = data.length ? `Всего: ${data.length}` : "Товаров не найдено";
     data.forEach((elem) => {
-      const element = new Good(elem, this.size);
+      const element =
+        this.cartObserver.state && this.cartObserver.state[elem.id]
+          ? new Good(elem, this.size, this.cartObserver, true)
+          : new Good(elem, this.size, this.cartObserver);
       element.addListeners();
       this.renderArr.push(element);
       this.container.appendChild(element.render());
