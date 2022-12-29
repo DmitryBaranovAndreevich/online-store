@@ -15,6 +15,7 @@ export class buttonInHeader {
 
   public render() {
     if (!this.isRender) {
+      const state = JSON.parse(localStorage.getItem("item") as string) as { [key: string]: number };
       this.isRender = true;
       const myElement = this.htmlPatern;
       const icon = createElement("div", "header__button-icon");
@@ -25,6 +26,9 @@ export class buttonInHeader {
       title.textContent = this.title;
       myElement.appendChild(icon);
       myElement.appendChild(title);
+      if (state && myElement.children[1].textContent === "Корзина") {
+        number.textContent = String(Object.values(state).reduce((a, b) => a + b, 0));
+      }
     }
     return this.htmlPatern;
   }

@@ -20,9 +20,10 @@
 .products__header {
     width: 100%;
     height: 15%;
-    border-radius: 16px;
-    box-shadow: var(--shadow);
     font-size: 36px;
+    line-height: 70px;
+    text-indent: 10px;
+    margin: 0 auto;
 }
 
 .products__field {
@@ -35,7 +36,7 @@
 .products__item {
     display: flex;
     width: 100%;
-    height: 100px;
+    height: 20%;
     border-radius: 16px;
     box-shadow: var(--shadow);
 }
@@ -54,6 +55,9 @@
 }
 
 .item__info {
+    display: flex;
+    justify-content: center;
+    text-align: center;
     width: 45%;
     height: 100%;
 }
@@ -77,6 +81,7 @@
     text-align: center;
     width: 100%;
     height: 30%;
+    margin: 0 auto;
 }
 
 .item__amount-buttons {
@@ -91,7 +96,7 @@
     width: 20%;
     height: 60%;
     border-radius: 50%;
-    border: black 1px solid;
+    border: #2CB708 2px solid;
     background-color: white;
     cursor: pointer;
     background-image: url("./../images/icons/plus-button.svg");
@@ -100,17 +105,29 @@
     background-size: auto;
 }
 
+.item__amount-plus:hover {
+    width: 21%;
+    height: 61%;
+    border: #28970C 2px solid;
+}
+
 .item__amount-minus {
     width: 20%;
     height: 60%;
     border-radius: 50%;
-    border: black 1px solid;
+    border: #2CB708 2px solid;
     background-color: white;
     cursor: pointer;
     background-image: url("./../images/icons/minus-button.svg");
     background-repeat: no-repeat;
     background-position: center;
     background-size: auto;
+}
+
+.item__amount-minus:hover {
+    width: 21%;
+    height: 61%;
+    border:#28970C 2px solid;
 }
 
 .summary {
@@ -123,9 +140,10 @@
 .summary__header {
     width: 100%;
     height: 15%;
-    border-radius: 16px;
-    box-shadow: var(--shadow);
     font-size: 36px;
+    line-height: 70px;
+    text-indent: 10px;
+    margin: 0 auto;
 }
 
 .summary__field {
