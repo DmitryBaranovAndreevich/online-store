@@ -10,7 +10,7 @@ import { CreditCardDetails } from "../components/creditCardDetails/creditCardDet
 
 export class PopupPage implements IPage {
   body;
-  private container;
+  container;
 
   constructor() {
     this.body = document.querySelector("body") as HTMLBodyElement;
@@ -23,6 +23,9 @@ export class PopupPage implements IPage {
 
   render() {
     const popup = new Popup("Оформите заказ");
+    popup.closeButton.addEventListener("click", () => {
+      this.container.classList.remove("popup-background_active");
+    });
     const inputName = new Input("Ваше имя", "text", 3, 2);
     const inputPhoneNumber = new NumberInputDecorator(new Input("Номер телефона", "text", 9, 1));
     const inputAdress = new Input("Адрес доставки", "text", 5, 3);
@@ -34,6 +37,3 @@ export class PopupPage implements IPage {
     this.body?.appendChild(this.container);
   }
 }
-
-const popup = new PopupPage();
-popup.render();
