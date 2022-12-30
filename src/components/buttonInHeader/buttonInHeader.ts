@@ -13,6 +13,12 @@ export class buttonInHeader {
     this.htmlPatern = createElement("div", className ? `${className} header__button` : "header__button");
   }
 
+  private clickToButton() {
+    this.htmlPatern.addEventListener("click", () => {
+      window.location.href = "/cart";
+    });
+  }
+
   public render() {
     if (!this.isRender) {
       const state = JSON.parse(localStorage.getItem("item") as string) as { [key: string]: number };
@@ -29,6 +35,7 @@ export class buttonInHeader {
       if (state && myElement.children[1].textContent === "Корзина") {
         number.textContent = String(Object.values(state).reduce((a, b) => a + b, 0));
       }
+      this.clickToButton();
     }
     return this.htmlPatern;
   }
