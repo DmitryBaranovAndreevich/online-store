@@ -12,6 +12,7 @@ export class Input implements IInput {
   span;
   minWords;
   minLength;
+  valid;
   constructor(name: string, type: string, minLength = 3, minWords = 1) {
     this.container = createElement(Tags.div, "form-element") as HTMLDivElement;
     this.label = createElement(Tags.label, "form-element__label", name) as HTMLLabelElement;
@@ -22,13 +23,14 @@ export class Input implements IInput {
     this.minWords = minWords;
     this.minLength = minLength;
     this.span.textContent = `Минимальное число слов: ${this.minWords}, минимальное кол-во букв в каждом слове: ${this.minLength}`;
+    this.valid = false;
   }
 
   private setAtribute() {
     this.input.type = this.type;
     this.input.id = `input__${generateHash(this.name)}`;
     this.input.required = true;
-    this.input.formNoValidate = true;
+    // this.input.formNoValidate = true;
     this.label.htmlFor = `input__${generateHash(this.name)}`;
     this.label.id = `label__${generateHash(this.name)}`;
     this.container.append(this.label, this.input, this.span);
@@ -62,14 +64,14 @@ export class Input implements IInput {
     return true;
   }
 
-  isValid = () => {
+  public isValid = () => {
     if (this.addValid() && this.validateName()) {
       this.hideInputError();
+      this.valid = true;
     } else {
       this.showInputError();
+      this.valid = false;
     }
-
-    if (this.input.value === "") this.hideInputError();
   };
 
   private addListeners() {

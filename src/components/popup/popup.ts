@@ -8,7 +8,9 @@ export class Popup implements IComponent {
   title;
   closeButton;
   constructor(name: string) {
-    this.container = createElement(Tags.form, "popup") as HTMLDivElement;
+    this.container = createElement(Tags.form, "popup") as HTMLFormElement;
+    this.container.noValidate = true;
+    this.container.onsubmit = (e) => e.preventDefault();
     this.closeButton = createElement(Tags.button, "popup__close-button");
     this.title = createElement(Tags.p, "popup__title", name);
   }

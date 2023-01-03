@@ -5,6 +5,10 @@ export class CvtInputDecoration {
     component.span.textContent = `Мин. ${this.component.minLength} цыфры`;
   }
 
+  get input() {
+    return this.component;
+  }
+
   isValid() {
     this.component.addValid = function () {
       const number = this.input.value;
