@@ -5,6 +5,10 @@ export class EmailInputDecorator {
     component.span.textContent = `Введите email, кол-во символов не менее ${component.minLength}`;
   }
 
+  get input() {
+    return this.component;
+  }
+
   isValid() {
     this.component.addValid = function () {
       const email = this.input.value;

@@ -5,6 +5,10 @@ export class NumberInputDecorator {
     component.span.textContent = `Номер должен начинаться с "+" и иметь не менее ${component.minLength}`;
   }
 
+  get input() {
+    return this.component;
+  }
+
   isValid() {
     this.component.addValid = function () {
       const number = this.input.value;

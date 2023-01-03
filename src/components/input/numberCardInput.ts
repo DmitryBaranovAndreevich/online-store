@@ -6,6 +6,10 @@ export class NumberCardInputDecorator {
     this.component.input.addEventListener("input", setIcon);
   }
 
+  get input() {
+    return this.component;
+  }
+
   isValid() {
     this.component.addValid = function () {
       const number = this.input.value;

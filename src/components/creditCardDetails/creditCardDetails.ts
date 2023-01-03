@@ -19,13 +19,15 @@ export class CreditCardDetails implements IComponent {
   private icon;
   private numberInput;
   private iconContainer;
-  constructor() {
+  inputs;
+  constructor(inputsContainer: Array<Input>) {
     this.container = createElement(Tags.div, "credit-card");
     this.name = createElement(Tags.p, "credit-card__title", "Введите данные банковской карты");
     this.wrapper = createElement(Tags.div, "credit-card__wrapper");
     this.icon = createElement(Tags.img, "credit-card__icon") as HTMLImageElement;
     this.numberInput = new NumberCardInputDecorator(new Input("Номер:", "number", 16, 1), this.setIcon);
     this.iconContainer = createElement(Tags.div, "credit-card__container");
+    this.inputs = inputsContainer;
   }
 
   private updateImage(url: string) {
@@ -63,6 +65,10 @@ export class CreditCardDetails implements IComponent {
     const dateInput = new DateInputMonthDecorator(new Input("Окончание действия:", "text", 2, 1));
     const dateInput2 = new DateInputYearDecorator(new Input("/", "text", 2, 1));
     const cvtInput = new CvtInputDecoration(new Input("CVT:", "number", 3, 1));
+    this.inputs.push(dateInput.input);
+    this.inputs.push(dateInput2.input);
+    this.inputs.push(cvtInput.input);
+    this.inputs.push(this.numberInput.input);
     container2.append(dateInput.render(), dateInput2.render());
     this.iconContainer.append(this.icon, this.numberInput.render());
     this.wrapper.append(this.iconContainer, container2, cvtInput.render());

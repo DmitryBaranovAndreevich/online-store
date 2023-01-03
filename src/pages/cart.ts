@@ -7,9 +7,6 @@ import { IGood } from "../interface/good";
 import { CartObserver } from "../service/cartObserver";
 import { PopupPage } from "./popup";
 
-const popup = new PopupPage();
-popup.render();
-
 class CartGood {
   private chosenItem;
   public index;
@@ -128,10 +125,12 @@ export class Cart {
     const productsHeader = createElement("p", "products__header", "Products in Cart");
     const summaryHeader = createElement("p", "summary__header", "Summary");
     const summaryField = createElement("div", "summary__field");
-    const buyButton = createElement("button", "buy__button", "BUY NOW");
+    const buyButton = createElement("button", "buy__button", "BUY NOW") as HTMLButtonElement;
     buyButton.addEventListener("click", () => {
       popup.container.classList.add("popup-background_active");
     });
+    const popup = new PopupPage(buyButton);
+    popup.render();
     this.append(Header.getInstance().render(), cartMain);
 
     const products = createElement("section", "products");

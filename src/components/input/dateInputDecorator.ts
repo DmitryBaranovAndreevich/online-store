@@ -5,6 +5,10 @@ export class DateInputMonthDecorator {
     component.span.textContent = `Введите месяц в формате "мм"`;
   }
 
+  get input() {
+    return this.component;
+  }
+
   isValid() {
     this.component.addValid = function () {
       const text = this.input.value;
@@ -23,6 +27,10 @@ export class DateInputMonthDecorator {
 export class DateInputYearDecorator {
   constructor(private component: Input) {
     component.span.textContent = `Мин. 2 цыфры`;
+  }
+
+  get input() {
+    return this.component;
   }
 
   isValid() {
