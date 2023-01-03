@@ -7,7 +7,7 @@ import { createElement } from "../service";
 import { UrlHandler } from "../service/urlHandler";
 
 const urlHandler = new UrlHandler();
-const id = urlHandler.searchParams("id");
+const id = urlHandler.searchParams("id") as string;
 const goodsArr: IGood[] = goods.products;
 const selectedItem: IGood | undefined = goodsArr.find((item) => item.id === +id);
 console.log(id); // id товара
