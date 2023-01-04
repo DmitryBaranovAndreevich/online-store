@@ -16,12 +16,13 @@ export class PopupPage implements IPage {
   inputs: Array<Input> = [];
   openButton;
 
-  constructor(openButton: HTMLButtonElement) {
+  constructor(openButton: HTMLButtonElement, open = false) {
     this.body = document.querySelector("body") as HTMLBodyElement;
     this.container = createElement(Tags.div, "popup-background");
     this.sendButton = createElement(Tags.button, "popup__button", "Оплатить");
     this.message = createElement(Tags.p, "popup__message", "Ваш заказ оплачен!");
     this.openButton = openButton;
+    if (open) this.container.classList.add("popup-background_active");
   }
 
   append(...node: Array<HTMLElement>) {

@@ -24,7 +24,7 @@ export class Header {
     if (Header.instance === null) {
       const logo = new Logo();
       const buttonBasket = new buttonInHeader(basketUrl as string, "Корзина", "").render();
-      const buttonOrders = new buttonInHeader(ordersUrl as string, "Заказы", "").render();
+      const buttonOrders = new buttonInHeader(ordersUrl as string, "Сумма", "").render();
       Header.instance = new Header(logo, buttonBasket, buttonOrders);
     }
 

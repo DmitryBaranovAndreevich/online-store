@@ -142,7 +142,7 @@
 }
 
 .chart__button:hover {
-  background-color: #28970c;
+  opacity: .6;
 }
 
 .chart__button__added {
@@ -153,6 +153,11 @@
     border: none;
     border-radius: 10px;
     cursor: pointer;
+    opacity: 0.5;
+}
+
+.chart__button__added:hover {
+    cursor: default;
 }
 
 .buy__button {
@@ -166,19 +171,11 @@
 }
 
 .buy__button:hover {
-  background-color: #28970c;
+  opacity: .6;
 }
 
 .footer {
   width: 1220px;
   height: 80px;
   bottom: 0px;
-}
-
-.buy__button_disabled {
-  opacity: 0.5;
-}
-
-.buy__button_disabled:hover {
-  cursor: default;
 }
