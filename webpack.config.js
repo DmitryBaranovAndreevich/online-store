@@ -11,6 +11,7 @@ module.exports = {
     popup: "./src/pages/popup.ts",
     goods: "./src/pages/goods.ts",
     cart: "./src/pages/cart.ts",
+    notfound: "./src/pages/notfound.ts",
   },
   output: {
     path: path.resolve(__dirname, "dist"),

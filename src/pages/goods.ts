@@ -14,14 +14,18 @@ console.log(id); // id товара
 console.log("test");
 export class GoodsCart {
   body;
+  state: { [key: string]: number } = {};
+  private chartButton: HTMLElement;
   constructor() {
     this.body = document.querySelector("body") as HTMLElement;
+    this.state = JSON.parse(localStorage.getItem("item") as string) as { [key: string]: number };
+    this.chartButton = createElement("button", "chart__button");
   }
   append(node: HTMLElement) {
     this.body.appendChild(node);
   }
 
-  fill(): void {
+  public fill(): void {
     this.append(Header.getInstance().render());
     const main: HTMLElement = createElement("div", "main");
     this.append(main);
@@ -146,13 +150,32 @@ export class GoodsCart {
     if (selectedItem !== undefined) {
       goodsPrice.textContent = selectedItem.price.toString() + " $";
     }
-    const chartButton: HTMLElement = createElement("button", "chart__button");
-    chartButton.textContent = "ADD TO CHART";
+    this.chartButton;
+    this.chartButton.textContent = "ADD TO CHART";
     const buyButton: HTMLElement = createElement("button", "buy__button");
     buyButton.textContent = "BUY NOW";
-    goodsPurchaseBLock.append(goodsPrice, chartButton, buyButton);
+    goodsPurchaseBLock.append(goodsPrice, this.chartButton, buyButton);
+  }
+
+  private goodToCart = () => {
+    const selectedItem: IGood | undefined = goodsArr.find((item) => item.id === +id);
+    if (selectedItem) {
+      this.state = { ...this.state, [selectedItem.id]: 1 };
+      console.log(this.state);
+      localStorage.setItem("item", JSON.stringify(this.state));
+    }
+    Header.getInstance().clearUpdateIcon();
+    this.chartButton.textContent = "ALREADY IN THE CART";
+    this.chartButton.classList.remove("chart__button__added");
+    this.chartButton.classList.add("chart__button__added");
+    console.log(this.state);
+  };
+
+  public goodListener() {
+    this.chartButton.addEventListener("click", this.goodToCart);
   }
 }
 
 const goodsCart = new GoodsCart();
 goodsCart.fill();
+goodsCart.goodListener();

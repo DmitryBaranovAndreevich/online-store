@@ -1,0 +1,29 @@
+
+
+:root {
+    --shadow: 0 0 4px hsl(225deg 9% 91% / 60%), 0 4px 16px hsl(225deg 9% 91% / 60%);
+  }
+
+.main {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    max-width: var(--max-width);
+    height: 540px;
+    margin: 10px auto;
+    border-radius: 16px;
+    box-shadow: var(--shadow);
+}
+
+.error__block {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    font-size: 56px;
+    width: 50%;
+    height: 30%;
+    border: #2CB708 5px solid;
+    border-radius: 16px;
+    box-shadow: var(--shadow);
+}

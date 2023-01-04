@@ -10,12 +10,14 @@ export class Header {
   private isRender = false;
   private logo;
   private elements;
+  public buttonsContainer: HTMLElement;
   // private basket = null;
   // private price = null;
 
   constructor(logo: Logo, ...elements: Array<HTMLElement>) {
     this.logo = logo;
     this.elements = elements;
+    this.buttonsContainer = document.createElement("div");
   }
 
   static getInstance() {
@@ -29,15 +31,26 @@ export class Header {
     return Header.instance;
   }
 
+  public clearUpdateIcon() {
+    this.buttonsContainer.innerHTML = "";
+    this.buttonsContainer.className = "header__buttons-container";
+    this.buttonsContainer.append(...this.elements);
+    this.addElement(this.buttonsContainer, this.buttonsContainer);
+    const number = document.querySelector(".header__number");
+    const state = JSON.parse(localStorage.getItem("item") as string) as { [key: string]: number };
+    if (number) {
+      number.textContent = String(Object.values(state).reduce((a, b) => a + b, 0));
+    }
+  }
+
   public render() {
     if (!this.isRender) {
       this.isRender = true;
       this.container.className = "header";
       this.logo.render(this.container);
-      const buttonsContainer = document.createElement("div");
-      buttonsContainer.className = "header__buttons-container";
-      buttonsContainer.append(...this.elements);
-      this.addElement(buttonsContainer, buttonsContainer);
+      this.buttonsContainer.className = "header__buttons-container";
+      this.buttonsContainer.append(...this.elements);
+      this.addElement(this.buttonsContainer, this.buttonsContainer);
     }
     return this.container;
   }

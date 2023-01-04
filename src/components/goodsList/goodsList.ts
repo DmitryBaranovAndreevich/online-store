@@ -4,6 +4,7 @@ import { Tags } from "../../interface/tags";
 import { createElement, goods } from "../../service";
 import { UrlHandler } from "../../service/urlHandler";
 import { CartObserver } from "../../service/cartObserver";
+import { Header } from "../header/header";
 
 // interface IArray {
 //   id: number;
@@ -48,6 +49,7 @@ export class Good {
 
   private handelClickToCart = () => {
     this.cartObserver.addElement(this.params.id);
+    Header.getInstance().clearUpdateIcon();
   };
 
   private handelClickToDescription = () => {

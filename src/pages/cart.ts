@@ -58,10 +58,12 @@ class CartGood {
 
   private increaseAmount = () => {
     this.observer.increase(this.chosenItem.id);
+    Header.getInstance().clearUpdateIcon();
   };
 
   private decreaseAmount = () => {
     this.observer.decrease(this.chosenItem.id);
+    Header.getInstance().clearUpdateIcon();
   };
 
   render() {
