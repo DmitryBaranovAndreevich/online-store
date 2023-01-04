@@ -146,6 +146,16 @@
     background-color: #28970C;
 }
 
+.chart__button__added {
+    width: 70%;
+    height: 15%;
+    color: white;
+    background-color: goldenrod;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
 .buy__button {
     width: 70%;
     height: 15%;
