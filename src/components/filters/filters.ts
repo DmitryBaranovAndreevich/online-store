@@ -142,6 +142,16 @@ export class Filters {
     const wrapper = createElement(Tags.div, "accordion__wrapper");
     const priceSlider = new SliderFilter("Цена", "price", "0", "1500", this.urlHandler).render();
     const scoreSlider = new SliderFilter("На складе", "stock", "0", "500", this.urlHandler).render();
+    const saveButton = createElement(Tags.button, "accordion-item__button accordion-item__button_type_save", "Скопировать поиск");
+    saveButton.addEventListener("click", () => {
+      const url = document.URL;
+      navigator.clipboard
+        .writeText(url)
+        .then(() => saveButton.classList.add("accordion-item__button_disabled"))
+        .catch((err) => {
+          console.log("Something went wrong", err);
+        });
+    });
     wrapper.appendChild(new HeaderInFilter().render());
 
     const filterArr = this.data.map(({ name, items }) => {
@@ -154,7 +164,7 @@ export class Filters {
     });
     filterArr.forEach((filter) => wrapper.appendChild(filter));
     container.appendChild(wrapper);
-    this.container.append(container, priceSlider, scoreSlider);
+    this.container.append(container, priceSlider, scoreSlider, saveButton);
   }
 
   public render() {
