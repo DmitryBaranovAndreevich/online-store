@@ -28,7 +28,11 @@ export class Good {
     this.params = params;
     this.container = createElement(Tags.div, `good-card_${size} ${this.addClass}`);
     this.size = size;
-    this.buyButton = createElement(Tags.button, `good-card__button`, "Купить");
+    this.buyButton = createElement(Tags.button, `good-card__button`, "Купить") as HTMLButtonElement;
+    if (add) {
+      this.buyButton.disabled = true;
+      this.buyButton.classList.add("good-card__button_disabled");
+    }
     this.descriptionButton = createElement(Tags.button, `good-card__button`, "Описание");
     this.cartObserver = observer;
   }

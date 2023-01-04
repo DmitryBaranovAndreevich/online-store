@@ -54,6 +54,20 @@
   font-weight: 500;
 }
 
+.accordion-item__button_type_save {
+  width: 100%;
+  padding: 10px;
+  margin-top: 10px;
+  display: block;
+  border-radius: 16px;
+  box-shadow: var(--shadow);
+}
+
+.accordion-item__button_disabled {
+  background-color: goldenrod;
+  cursor: default;
+}
+
 .accordion-item__button:hover {
   opacity: 0.6;
 }
@@ -96,11 +110,11 @@
   border: 3px solid transparent;
   transition: 0.2s;
   border-radius: 10px;
-  transition: .2s;
+  transition: 0.2s;
 }
 
 .home__sort-buttons:hover {
-  opacity: .8;
+  opacity: 0.8;
 }
 
 .home__sort-buttons + .home__sort-buttons {

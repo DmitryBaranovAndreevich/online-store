@@ -7,11 +7,10 @@ import { createElement } from "../service";
 import { UrlHandler } from "../service/urlHandler";
 
 const urlHandler = new UrlHandler();
-const id = urlHandler.searchParams("id");
+const id = urlHandler.searchParams("id") as string;
 const goodsArr: IGood[] = goods.products;
-const selectedItem: IGood | undefined = goodsArr.find((item) => item.id === +id);
-console.log(id); // id товара
-console.log("test");
+const selectedItem = goodsArr.find((item) => item.id === +id) as IGood;
+
 export class GoodsCart {
   body;
   state: { [key: string]: number } = {};
@@ -20,6 +19,7 @@ export class GoodsCart {
     this.body = document.querySelector("body") as HTMLElement;
     this.state = JSON.parse(localStorage.getItem("item") as string) as { [key: string]: number };
     this.chartButton = createElement("button", "chart__button");
+    this.chartButton.textContent = "ADD TO CHART";
   }
   append(node: HTMLElement) {
     this.body.appendChild(node);
@@ -67,9 +67,7 @@ export class GoodsCart {
     const goodsName: HTMLElement = createElement("h1", "goods__name");
     const goodsInfo: HTMLElement = createElement("div", "goods__info");
     goodsContainer.append(goodsName, goodsInfo);
-    if (selectedItem !== undefined) {
-      goodsName.textContent = selectedItem.title;
-    }
+    goodsName.textContent = selectedItem.title;
     const goodsPhotoBLock: HTMLElement = createElement("div", "goods__photo-block");
     const goodsPhotoMain: HTMLElement = createElement("div", "goods__photo-main");
     if (selectedItem !== undefined) {
@@ -89,7 +87,13 @@ export class GoodsCart {
       }
     }
     const goodsDescriptionBLock: HTMLElement = createElement("div", "goods__description-block");
+
+    const buyButton: HTMLElement = createElement("button", "buy__button");
+    buyButton.textContent = "BUY NOW";
     const goodsPurchaseBLock: HTMLElement = createElement("div", "goods__purchase-block");
+    const goodsPrice: HTMLElement = createElement("div", "goods__price");
+    goodsPrice.textContent = selectedItem.price.toString() + " $";
+    goodsPurchaseBLock.append(goodsPrice, this.chartButton, buyButton);
     goodsInfo.append(goodsPhotoBLock, goodsDescriptionBLock, goodsPurchaseBLock);
 
     for (let i = 0; i < 6; i++) {
@@ -146,29 +150,29 @@ export class GoodsCart {
       }
     }
 
-    const goodsPrice: HTMLElement = createElement("div", "goods__price");
-    if (selectedItem !== undefined) {
-      goodsPrice.textContent = selectedItem.price.toString() + " $";
+    if (this.state && String(selectedItem.id) in this.state) {
+      this.updateChartButton();
     }
-    this.chartButton;
-    this.chartButton.textContent = "ADD TO CHART";
-    const buyButton: HTMLElement = createElement("button", "buy__button");
-    buyButton.textContent = "BUY NOW";
-    goodsPurchaseBLock.append(goodsPrice, this.chartButton, buyButton);
+
+    buyButton.addEventListener("click", () => {
+      if (this.state && !(String(selectedItem.id) in this.state)) this.goodToCart();
+      window.location.href = "/cart?popup=open";
+    });
+  }
+
+  private updateChartButton() {
+    this.chartButton.textContent = "ALREADY IN THE CART";
+    this.chartButton.classList.add("chart__button__added");
   }
 
   private goodToCart = () => {
     const selectedItem: IGood | undefined = goodsArr.find((item) => item.id === +id);
     if (selectedItem) {
       this.state = { ...this.state, [selectedItem.id]: 1 };
-      console.log(this.state);
       localStorage.setItem("item", JSON.stringify(this.state));
     }
     Header.getInstance().clearUpdateIcon();
-    this.chartButton.textContent = "ALREADY IN THE CART";
-    this.chartButton.classList.remove("chart__button__added");
-    this.chartButton.classList.add("chart__button__added");
-    console.log(this.state);
+    this.updateChartButton();
   };
 
   public goodListener() {

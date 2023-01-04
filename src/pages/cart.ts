@@ -6,6 +6,7 @@ import { createElement } from "../service";
 import { IGood } from "../interface/good";
 import { CartObserver } from "../service/cartObserver";
 import { PopupPage } from "./popup";
+import { UrlHandler } from "../service/urlHandler";
 
 class CartGood {
   private chosenItem;
@@ -81,12 +82,14 @@ export class Cart {
   private products: Array<CartGood> = [];
   private summaryProducts;
   private summarySum;
+  private urlHandler;
   constructor() {
     this.body = document.querySelector("body") as HTMLElement;
     this.productsField = createElement("div", "products__field") as HTMLDivElement;
     this.summaryProducts = createElement("p", "summary__products", "Products: 0");
     this.summarySum = createElement("p", "summary__sum", "Total sum: 0");
     this.observer = new CartObserver();
+    this.urlHandler = new UrlHandler();
     this.observer.subscribe(this);
     this.cartItems = this.observer.state
       ? Array.from(Object.keys(this.observer.state)).map((id) => {
@@ -128,10 +131,12 @@ export class Cart {
     const summaryHeader = createElement("p", "summary__header", "Summary");
     const summaryField = createElement("div", "summary__field");
     const buyButton = createElement("button", "buy__button", "BUY NOW") as HTMLButtonElement;
+    const openPopup = this.urlHandler.searchParams("popup") ? true : false;
+    const popup = new PopupPage(buyButton, openPopup);
     buyButton.addEventListener("click", () => {
       popup.container.classList.add("popup-background_active");
     });
-    const popup = new PopupPage(buyButton);
+
     popup.render();
     this.append(Header.getInstance().render(), cartMain);
 
