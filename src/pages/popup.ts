@@ -40,7 +40,7 @@ export class PopupPage implements IPage {
       this.container.classList.remove("popup-background_active");
       this.message.classList.add("popup__message_visible");
       localStorage.removeItem("item");
-      setTimeout(() => (window.location.href = "/main"), 3000);
+      setTimeout(() => (window.location.href = "/online-store/main"), 3000);
     }
   };
 

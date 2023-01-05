@@ -43,6 +43,3 @@ export class MainPage implements IPage {
     if (this.urlHandler.isParams()) SortElements.getInstance().sort();
   }
 }
-
-const mainPage = new MainPage();
-mainPage.render();

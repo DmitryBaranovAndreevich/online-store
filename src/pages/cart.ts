@@ -107,7 +107,7 @@ export class Cart {
     this.clear();
     data.forEach((el, index) => {
       const productsItem = new CartGood(el, index + 1, this.observer);
-      this.products.push(productsItem); // чтобы поптом удалить обработчики
+      this.products.push(productsItem);
       this.productsField.append(productsItem.render());
     });
     const fullPrice = (data as Array<IGood>).reduce((priv, { price, volume }) => priv + price * (volume as number), 0);
@@ -122,7 +122,6 @@ export class Cart {
 
   private clear() {
     this.productsField.innerHTML = "";
-    // удаляем обработчики
     this.products = [];
   }
 
@@ -156,6 +155,3 @@ export class Cart {
     summaryField.append(this.summaryProducts, this.summarySum, inputPromo, buyButton);
   }
 }
-
-const cart = new Cart();
-cart.construct();
