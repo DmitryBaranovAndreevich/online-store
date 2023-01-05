@@ -26,7 +26,7 @@ export class GoodsCart {
     this.body.appendChild(node);
   }
 
-  public fill(): void {
+  public fill() {
     this.append(Header.getInstance().render());
     const main: HTMLElement = createElement(Tags.div, "main");
     this.append(main);
@@ -159,6 +159,8 @@ export class GoodsCart {
       if (this.state && !(String(selectedItem.id) in this.state)) this.goodToCart();
       window.location.href = "/cart?popup=open";
     });
+
+    return this;
   }
 
   private updateChartButton() {
@@ -181,6 +183,6 @@ export class GoodsCart {
   }
 }
 
-const goodsCart = new GoodsCart();
-goodsCart.fill();
-goodsCart.goodListener();
+// const goodsCart = new GoodsCart();
+// goodsCart.fill();
+// goodsCart.goodListener();

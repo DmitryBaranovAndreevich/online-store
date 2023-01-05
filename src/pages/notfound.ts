@@ -4,7 +4,7 @@ import { Header } from "../components/header/header";
 import { createElement } from "../service";
 import { Tags } from "../interface/tags";
 
-class NotFound {
+export class NotFound {
   body;
   constructor() {
     this.body = document.querySelector("body") as HTMLElement;
@@ -23,5 +23,5 @@ class NotFound {
   }
 }
 
-const notfound = new NotFound();
-notfound.errorState();
+// const notfound = new NotFound();
+// notfound.errorState();

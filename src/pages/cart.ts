@@ -157,5 +157,5 @@ export class Cart {
   }
 }
 
-const cart = new Cart();
-cart.construct();
+// const cart = new Cart();
+// cart.construct();

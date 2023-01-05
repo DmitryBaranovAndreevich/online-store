@@ -57,7 +57,7 @@ export class Good {
   };
 
   private handelClickToDescription = () => {
-    window.location.href = `/goods?id=${this.params.id}`;
+    window.location.href = `/online-store/goods?id=${this.params.id}`;
   };
 
   public removeListeners() {
