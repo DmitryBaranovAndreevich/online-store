@@ -129,7 +129,7 @@ export class GoodsCart {
 
     buyButton.addEventListener("click", () => {
       if (this.state && !(String(this.selectedItem.id) in this.state)) this.goodToCart();
-      window.location.href = "/cart?popup=open";
+      window.location.href = "/online-store/cart?popup=open";
     });
 
     return this;
@@ -154,7 +154,3 @@ export class GoodsCart {
     this.chartButton.addEventListener("click", this.goodToCart);
   }
 }
-
-const goodsCart = new GoodsCart();
-goodsCart.fill();
-goodsCart.goodListener();
