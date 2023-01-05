@@ -28,7 +28,7 @@ export class buttonInHeader {
 
   private clickToButton() {
     this.htmlPatern.addEventListener("click", () => {
-      window.location.href = "/cart";
+      window.location.href = "/online-store/cart";
     });
   }
 
