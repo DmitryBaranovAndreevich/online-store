@@ -7,6 +7,7 @@ import { IGood } from "../interface/good";
 import { CartObserver } from "../service/cartObserver";
 import { PopupPage } from "./popup";
 import { UrlHandler } from "../service/urlHandler";
+import { Tags } from "../interface/tags";
 
 class CartGood {
   private chosenItem;
@@ -28,16 +29,16 @@ class CartGood {
     this.chosenItem = chosenItem;
     this.index = index;
     this.price = chosenItem.price;
-    this.productsItem = createElement("div", "products__item");
-    this.itemNumber = createElement("div", "item__number");
-    this.itemPhoto = createElement("div", "item__photo");
-    this.itemInfo = createElement("p", "item__info", chosenItem.title);
-    this.itemPrice = createElement("p", "item__price", String(chosenItem.price));
-    this.itemAmount = createElement("div", "item__amount");
-    this.itemAmountNumber = createElement("p", "item__amount-number", String(chosenItem.volume));
-    this.itemAmountButtons = createElement("div", "item__amount-buttons");
-    this.itemPlus = createElement("button", "item__amount-plus");
-    this.itemMinus = createElement("button", "item__amount-minus");
+    this.productsItem = createElement(Tags.div, "products__item");
+    this.itemNumber = createElement(Tags.div, "item__number");
+    this.itemPhoto = createElement(Tags.div, "item__photo");
+    this.itemInfo = createElement(Tags.p, "item__info", chosenItem.title);
+    this.itemPrice = createElement(Tags.p, "item__price", String(chosenItem.price));
+    this.itemAmount = createElement(Tags.div, "item__amount");
+    this.itemAmountNumber = createElement(Tags.p, "item__amount-number", String(chosenItem.volume));
+    this.itemAmountButtons = createElement(Tags.div, "item__amount-buttons");
+    this.itemPlus = createElement(Tags.button, "item__amount-plus");
+    this.itemMinus = createElement(Tags.button, "item__amount-minus");
     this.observer = observer;
   }
 
@@ -85,9 +86,9 @@ export class Cart {
   private urlHandler;
   constructor() {
     this.body = document.querySelector("body") as HTMLElement;
-    this.productsField = createElement("div", "products__field") as HTMLDivElement;
-    this.summaryProducts = createElement("p", "summary__products", "Products: 0");
-    this.summarySum = createElement("p", "summary__sum", "Total sum: 0");
+    this.productsField = createElement(Tags.div, "products__field") as HTMLDivElement;
+    this.summaryProducts = createElement(Tags.p, "summary__products", "Products: 0");
+    this.summarySum = createElement(Tags.p, "summary__sum", "Total sum: 0");
     this.observer = new CartObserver();
     this.urlHandler = new UrlHandler();
     this.observer.subscribe(this);
@@ -126,11 +127,11 @@ export class Cart {
   }
 
   construct(): void {
-    const cartMain = createElement("div", "cart__main");
-    const productsHeader = createElement("p", "products__header", "Products in Cart");
-    const summaryHeader = createElement("p", "summary__header", "Summary");
-    const summaryField = createElement("div", "summary__field");
-    const buyButton = createElement("button", "buy__button", "BUY NOW") as HTMLButtonElement;
+    const cartMain = createElement(Tags.div, "cart__main");
+    const productsHeader = createElement(Tags.p, "products__header", "Products in Cart");
+    const summaryHeader = createElement(Tags.p, "summary__header", "Summary");
+    const summaryField = createElement(Tags.div, "summary__field");
+    const buyButton = createElement(Tags.button, "buy__button", "BUY NOW") as HTMLButtonElement;
     const openPopup = this.urlHandler.searchParams("popup") ? true : false;
     const popup = new PopupPage(buyButton, openPopup);
     buyButton.addEventListener("click", () => {
@@ -140,8 +141,8 @@ export class Cart {
     popup.render();
     this.append(Header.getInstance().render(), cartMain);
 
-    const products = createElement("section", "products");
-    const summary = createElement("section", "summary");
+    const products = createElement(Tags.section, "products");
+    const summary = createElement(Tags.section, "summary");
     cartMain.append(products, summary);
 
     products.append(productsHeader, this.productsField);
@@ -149,7 +150,7 @@ export class Cart {
 
     summary.append(summaryHeader, summaryField);
 
-    const inputPromo: HTMLInputElement = createElement("input", "input__promo") as HTMLInputElement;
+    const inputPromo: HTMLInputElement = createElement(Tags.input, "input__promo") as HTMLInputElement;
     inputPromo.placeholder = "Enter promo code";
 
     summaryField.append(this.summaryProducts, this.summarySum, inputPromo, buyButton);

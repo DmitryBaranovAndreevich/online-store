@@ -37,7 +37,7 @@ export class MainPage implements IPage {
     wrapper.append(sortSection.render(), goodsList.render()); // добавляем блок с карточками товаров и шапку с поиском и сортировкой
     this.append(header); // добавляем header
     diskountBanner.render(this.body); // добавляем банер со скидками
-    const mainContent = createElement("div", "home__main-content");
+    const mainContent = createElement(Tags.div, "home__main-content");
     this.append(mainContent);
     mainContent.append(filter, wrapper); // добавляем блок с фильтрами
     if (this.urlHandler.isParams()) SortElements.getInstance().sort();
