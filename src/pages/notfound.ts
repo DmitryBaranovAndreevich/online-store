@@ -22,6 +22,3 @@ export class NotFound {
     main.append(errorBlock);
   }
 }
-
-// const notfound = new NotFound();
-// notfound.errorState();

@@ -17,8 +17,6 @@ export class Header {
   public buttonsContainer: HTMLElement;
   private cartItems: Array<IGood> | [];
   private observer: CartObserver;
-  // private basket = null;
-  // private price = null;
 
   constructor(logo: Logo, ...elements: Array<HTMLElement>) {
     this.logo = logo;
