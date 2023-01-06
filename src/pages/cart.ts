@@ -84,6 +84,7 @@ export class Cart {
   private summaryProducts;
   private summarySum;
   private urlHandler;
+  private pageLimitAmount: HTMLInputElement;
   constructor() {
     this.body = document.querySelector("body") as HTMLElement;
     this.productsField = createElement(Tags.div, "products__field") as HTMLDivElement;
@@ -91,6 +92,7 @@ export class Cart {
     this.summarySum = createElement(Tags.p, "summary__sum", "Total sum: 0");
     this.observer = new CartObserver();
     this.urlHandler = new UrlHandler();
+    this.pageLimitAmount = createElement(Tags.input, "page-limit__amount") as HTMLInputElement;
     this.observer.subscribe(this);
     this.cartItems = this.observer.state
       ? Array.from(Object.keys(this.observer.state)).map((id) => {
@@ -106,9 +108,11 @@ export class Cart {
   updateRender(data = this.cartItems) {
     this.clear();
     data.forEach((el, index) => {
-      const productsItem = new CartGood(el, index + 1, this.observer);
-      this.products.push(productsItem);
-      this.productsField.append(productsItem.render());
+      if (index < +this.pageLimitAmount.value) {
+        const productsItem = new CartGood(el, index + 1, this.observer);
+        this.products.push(productsItem);
+        this.productsField.append(productsItem.render());
+      }
     });
     const fullPrice = (data as Array<IGood>).reduce((priv, { price, volume }) => priv + price * (volume as number), 0);
     const fullAmount = (data as Array<IGood>).reduce((priv, { volume }) => priv + (volume as number), 0);
@@ -127,7 +131,24 @@ export class Cart {
 
   construct(): void {
     const cartMain = createElement(Tags.div, "cart__main");
-    const productsHeader = createElement(Tags.p, "products__header", "Products in Cart");
+    const productsHeader = createElement(Tags.p, "products__header");
+    const productsHeaderName = createElement(Tags.p, "products__header-name", "Products in Cart");
+    const productsHeaderControl = createElement(Tags.div, "products__header-control");
+    const pageLimit = createElement(Tags.div, "products__page-limit");
+    const pageLimitName = createElement(Tags.p, "page-limit__name", "Limit");
+    const pageLimitContent = createElement(Tags.div, "page-limit__content");
+    this.pageLimitAmount.type = "number";
+    this.pageLimitAmount.min = "0";
+    this.pageLimitAmount.max = "5";
+    this.pageLimitAmount.value = String(localStorage.getItem("page")) ? String(localStorage.getItem("page")) : "3";
+    localStorage.setItem("page", this.pageLimitAmount.value);
+    this.pageLimitAmount.addEventListener("change", function () {
+      localStorage.setItem("page", this.value);
+      yyy.updateRender();
+    });
+    const pageNumber = createElement(Tags.div, "products__page-number");
+    const pageNumberName = createElement(Tags.p, "page-number__name", "Page");
+    const pageNumberContent = createElement(Tags.div, "page-number__content");
     const summaryHeader = createElement(Tags.p, "summary__header", "Summary");
     const summaryField = createElement(Tags.div, "summary__field");
     const buyButton = createElement(Tags.button, "buy__button", "BUY NOW") as HTMLButtonElement;
@@ -144,6 +165,11 @@ export class Cart {
     const summary = createElement(Tags.section, "summary");
     cartMain.append(products, summary);
 
+    productsHeader.append(productsHeaderName, productsHeaderControl);
+    productsHeaderControl.append(pageLimit, pageNumber);
+    pageLimit.append(pageLimitName, pageLimitContent);
+    pageLimitContent.append(this.pageLimitAmount);
+    pageNumber.append(pageNumberName, pageNumberContent);
     products.append(productsHeader, this.productsField);
     this.updateRender();
 
@@ -155,3 +181,6 @@ export class Cart {
     summaryField.append(this.summaryProducts, this.summarySum, inputPromo, buyButton);
   }
 }
+
+const yyy = new Cart();
+//yyy.construct();
