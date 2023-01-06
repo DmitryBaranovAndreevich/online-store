@@ -1,6 +1,5 @@
 import "./cart.css";
 import "./home.css";
-import { goods } from "../service";
 import { Header } from "../components/header/header";
 import { createElement } from "../service";
 import { IGood } from "../interface/good";
@@ -94,18 +93,13 @@ export class Cart {
     this.urlHandler = new UrlHandler();
     this.pageLimitAmount = createElement(Tags.input, "page-limit__amount") as HTMLInputElement;
     this.observer.subscribe(this);
-    this.cartItems = this.observer.state
-      ? Array.from(Object.keys(this.observer.state)).map((id) => {
-          const good = goods.products.find((good) => good.id === Number(id)) as IGood;
-          return { ...good, volume: this.observer.state[id] };
-        })
-      : [];
+    this.cartItems = this.observer.state ? this.observer.setState() : [];
   }
   append(...node: Array<HTMLElement>) {
     this.body.append(...node);
   }
 
-  updateRender(data = this.cartItems) {
+  updateRender(data = this.observer.setState()) {
     this.clear();
     data.forEach((el, index) => {
       if (index < +this.pageLimitAmount.value) {
@@ -142,7 +136,7 @@ export class Cart {
     this.pageLimitAmount.max = "5";
     this.pageLimitAmount.value = String(localStorage.getItem("page")) ? String(localStorage.getItem("page")) : "3";
     localStorage.setItem("page", this.pageLimitAmount.value);
-    this.pageLimitAmount.addEventListener("change", function () {
+    this.pageLimitAmount.addEventListener("input", function () {
       localStorage.setItem("page", this.value);
       yyy.updateRender();
     });
@@ -183,4 +177,4 @@ export class Cart {
 }
 
 const yyy = new Cart();
-//yyy.construct();
+yyy.construct();
