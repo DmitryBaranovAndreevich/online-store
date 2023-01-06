@@ -18,12 +18,86 @@
 }
 
 .products__header {
+    display: flex;
     width: 100%;
     height: 15%;
     font-size: 36px;
     line-height: 70px;
     text-indent: 10px;
     margin: 0 auto;
+}
+
+.products__header-name {
+    width: 80%;
+    height: 100%;
+    font-size: 36px;
+    line-height: 70px;
+    text-indent: 10px;
+    margin: 0 auto;
+}
+
+.products__header-control {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    width: 20%;
+    height: 100%;
+    margin: 0 auto;
+}
+
+.products__page-limit {
+    display: flex;
+    flex-direction: column;
+    width: 50%;
+    height: 100%
+}
+
+.page-limit__name {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    width: 100%;
+    height: 30%;
+    font-size: 16px;
+    line-height: initial;
+    margin: 0 auto;
+}
+
+.page-limit__content {
+    display: flex;
+    width: 100%;
+    height: 70%;
+}
+
+.page-limit__amount {
+    width: 70%;
+    height: 100%;
+}
+
+.products__page-number {
+    display: flex;
+    flex-direction: column;
+    width: 50%;
+    height: 100%
+}
+
+.page-number__name {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    width: 100%;
+    height: 30%;
+    font-size: 16px;
+    line-height: initial;
+    margin: 0 auto;
+}
+
+.page-number__content {
+    display: flex;
+    width: 100%;
+    height: 70%;
 }
 
 .products__field {
