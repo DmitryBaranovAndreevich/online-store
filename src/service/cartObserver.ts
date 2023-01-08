@@ -40,10 +40,13 @@ export class CartObserver {
   }
 
   public setState() {
-    return Array.from(Object.keys(this.state)).map((id) => {
-      const good = goods.products.find((good) => good.id === Number(id)) as IGood;
-      return { ...good, volume: this.state[id] };
-    });
+    if (this.state !== null) {
+      return Array.from(Object.keys(this.state)).map((id) => {
+        const good = goods.products.find((good) => good.id === Number(id)) as IGood;
+        return { ...good, volume: this.state[id] };
+      });
+    }
+    return null;
   }
 
   public notify() {
