@@ -104,7 +104,7 @@ export class Cart {
     this.pageNumberAmount = createElement(Tags.div, "page-number__amount") as HTMLDivElement;
     this.observer.subscribe(this);
     this.pagesArr = [];
-    this.currentPage = localStorage.getItem("page") ? localStorage.getItem("page") : "1";
+    this.currentPage = localStorage.getItem("page") !== null ? localStorage.getItem("page") : "1";
     this.pageLimitAmount.value = String(localStorage.getItem("limit")) ? String(localStorage.getItem("limit")) : "3";
     this.cartPagesLength =
       this.observer.setState() !== null ? Math.floor(Object.keys(this.observer.state).length / +this.pageLimitAmount.value) : 0;
@@ -124,7 +124,7 @@ export class Cart {
       }
       this.pageNumberAmount.textContent = String(this.currentPage);
       data.forEach((el, index) => {
-        if (this.currentPage) {
+        if (this.currentPage && +this.currentPage > 0) {
           const borderNumber = +this.pageLimitAmount.value * +this.currentPage;
           if (index < borderNumber && index > borderNumber - (+this.pageLimitAmount.value + 1)) {
             const productsItem = new CartGood(el, index + 1, this.observer);
@@ -163,9 +163,16 @@ export class Cart {
     const pageLimitName = createElement(Tags.p, "page-limit__name", "Limit");
     const pageLimitContent = createElement(Tags.div, "page-limit__content");
     this.pageLimitAmount.type = "number";
-    this.pageLimitAmount.min = "0";
+    this.pageLimitAmount.min = "1";
     this.pageLimitAmount.max = "5";
-    localStorage.setItem("limit", this.pageLimitAmount.value);
+    this.pageLimitAmount.step = "1";
+    if (+this.pageLimitAmount.value < 1) {
+      this.pageLimitAmount.value = "1";
+      localStorage.setItem("limit", this.pageLimitAmount.value);
+    } else if (+this.pageLimitAmount.value > 5) {
+      this.pageLimitAmount.value = "5";
+      localStorage.setItem("limit", this.pageLimitAmount.value);
+    }
     this.pageLimitAmount.addEventListener(
       "input",
       (() => {
@@ -201,7 +208,7 @@ export class Cart {
       }
     };
     pageNumberRight.addEventListener("click", moveRight);
-    if (this.pageNumberAmount.textContent === "1") {
+    if (this.currentPage && +this.currentPage <= 1) {
       pageNumberLeft.setAttribute("disabled", "true");
     }
 
@@ -245,19 +252,28 @@ export class Cart {
   }
 
   renewCurrent() {
-    if (this.currentPage) {
+    if (this.currentPage && +this.currentPage >= 1) {
       this.currentPage = String(+this.currentPage - 1);
-      localStorage.setItem("page", this.currentPage);
+      if (+this.currentPage !== 0) {
+        localStorage.setItem("page", this.currentPage);
+      }
+      this.currentPage = null;
+      this.productsField.innerHTML = "NO GOODS IN THE CART";
+      this.productsField.classList.add("products__field-empty");
     }
   }
 
   inputFunction() {
+    if (+this.pageLimitAmount.value < 1) {
+      this.pageLimitAmount.value = "1";
+    } else if (+this.pageLimitAmount.value > 5) {
+      this.pageLimitAmount.value = "5";
+    }
     localStorage.setItem("limit", this.pageLimitAmount.value);
     this.pagesLengthUpdate();
     this.updateRender();
   }
 }
 
-
-//const yyy = new Cart();
-//yyy.construct();
+const yyy = new Cart();
+yyy.construct();
