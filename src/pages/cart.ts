@@ -155,3 +155,6 @@ export class Cart {
     summaryField.append(this.summaryProducts, this.summarySum, inputPromo, buyButton);
   }
 }
+
+const yyy = new Cart();
+yyy.construct();

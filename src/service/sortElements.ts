@@ -9,7 +9,7 @@ export class SortElements {
   private static instance: SortElements | null = null;
   private observer = FilterObserver.getInstance();
   private data;
-  private state;
+  private state: Array<IGood>;
   private types;
   constructor(data = goods.products, types: Array<string> = []) {
     this.data = data;
@@ -67,7 +67,9 @@ export class SortElements {
 
   public filter(slider: SliderFilter) {
     this.state = this.state.filter(
-      (el) => el[slider.englishName] >= slider.leftInput.value && el[slider.englishName] < slider.rightInput.value
+      (el) =>
+        (el[slider.englishName] as number) >= Number(slider.leftInput.value) &&
+        (el[slider.englishName] as number) < Number(slider.rightInput.value)
     );
   }
 
@@ -105,8 +107,8 @@ export class SortElements {
     this.state = this.state.filter((good) =>
       (
         Object.values(good).reduce((priv, property) => {
-          const privToArr = Array.isArray(priv) ? priv : String(priv).split(" ");
-          const proprtyToArr = Array.isArray(property) ? property : String(property).split(" ");
+          const privToArr = Array.isArray(priv) ? (priv as string[]) : String(priv).split(" ");
+          const proprtyToArr = Array.isArray(property) ? (property as string[]) : String(property).split(" ");
           return [...privToArr, ...proprtyToArr];
         }, []) as string[]
       ).includes(text)
