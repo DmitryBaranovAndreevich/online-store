@@ -63,7 +63,6 @@ export class Header {
         : [];
       const priceData = this.cartItems;
       const price = priceData.reduce((priv, { price, volume }) => priv + price * (volume as number), 0);
-      console.log(price);
       sum.textContent = String(price);
     }
   }

@@ -116,7 +116,6 @@ export class Cart {
 
   updateRender(data = this.observer.setState()) {
     this.clear();
-    console.log(this.currentPage);
     this.productsField.classList.remove(".products__field-empty");
     if (data !== null) {
       for (let i = 1; i < this.cartPagesLength; i++) {
