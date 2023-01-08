@@ -151,6 +151,14 @@
     box-shadow: var(--shadow);
 }
 
+.products__field-empty {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    font-size: 36px;
+}
+
 .products__item {
     display: flex;
     width: 100%;

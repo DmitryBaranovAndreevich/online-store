@@ -23,6 +23,7 @@ class CartGood {
   private itemPlus;
   private itemMinus;
   private observer: CartObserver;
+  private cartUsage: Cart;
 
   constructor(chosenItem: IGood, index: number, observer: CartObserver) {
     this.chosenItem = chosenItem;
@@ -39,6 +40,7 @@ class CartGood {
     this.itemPlus = createElement(Tags.button, "item__amount-plus");
     this.itemMinus = createElement(Tags.button, "item__amount-minus");
     this.observer = observer;
+    this.cartUsage = new Cart();
   }
 
   private append() {
@@ -64,8 +66,8 @@ class CartGood {
 
   private decreaseAmount = () => {
     this.observer.decrease(this.chosenItem.id);
-    yyy.renewCurrent();
-    yyy.updateRender();
+    this.cartUsage.renewCurrent();
+    this.cartUsage.updateRender();
     Header.getInstance().clearUpdateIcon();
   };
 
@@ -112,6 +114,8 @@ export class Cart {
 
   updateRender(data = this.observer.setState()) {
     this.clear();
+    console.log(this.currentPage);
+    this.productsField.classList.remove(".products__field-empty");
     if (data !== null) {
       for (let i = 1; i < this.cartPagesLength; i++) {
         this.pagesArr.push(i);
@@ -134,6 +138,7 @@ export class Cart {
       this.setPrise(fullAmount, fullPrice);
     } else {
       this.productsField.innerHTML = "NO GOODS IN THE CART";
+      this.productsField.classList.add("products__field-empty");
     }
   }
 
@@ -159,11 +164,12 @@ export class Cart {
     this.pageLimitAmount.min = "0";
     this.pageLimitAmount.max = "5";
     localStorage.setItem("limit", this.pageLimitAmount.value);
-    this.pageLimitAmount.addEventListener("input", function () {
-      localStorage.setItem("limit", this.value);
-      yyy.pagesLengthUpdate();
-      yyy.updateRender();
-    });
+    this.pageLimitAmount.addEventListener(
+      "input",
+      (() => {
+        this.inputFunction();
+      }).bind(this)
+    );
     const pageNumber = createElement(Tags.div, "products__page-number");
     const pageNumberName = createElement(Tags.p, "page-number__name", "Page");
     const pageNumberContent = createElement(Tags.div, "page-number__content");
@@ -173,7 +179,7 @@ export class Cart {
         this.currentPage = String(+this.currentPage - 1);
         this.pageNumberAmount.textContent = this.currentPage;
         localStorage.setItem("page", this.currentPage);
-        yyy.updateRender();
+        this.updateRender();
         pageNumberRight.removeAttribute("disabled");
       } else {
         pageNumberLeft.setAttribute("disabled", "true");
@@ -186,7 +192,7 @@ export class Cart {
         this.currentPage = String(+this.currentPage + 1);
         this.pageNumberAmount.textContent = this.currentPage;
         localStorage.setItem("page", this.currentPage);
-        yyy.updateRender();
+        this.updateRender();
         pageNumberLeft.removeAttribute("disabled");
       } else {
         pageNumberRight.setAttribute("disabled", "true");
@@ -235,13 +241,18 @@ export class Cart {
   }
 
   renewCurrent() {
-    this.currentPage = localStorage.getItem("page") ? localStorage.getItem("page") : "1";
     if (this.currentPage) {
       this.currentPage = String(+this.currentPage - 1);
       localStorage.setItem("page", this.currentPage);
     }
   }
+
+  inputFunction() {
+    localStorage.setItem("limit", this.pageLimitAmount.value);
+    this.pagesLengthUpdate();
+    this.updateRender();
+  }
 }
 
-const yyy = new Cart();
-yyy.construct();
+//const yyy = new Cart();
+//yyy.construct();
