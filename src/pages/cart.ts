@@ -273,6 +273,3 @@ export class Cart {
     this.updateRender();
   }
 }
-
-const yyy = new Cart();
-yyy.construct();
