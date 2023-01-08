@@ -1,6 +1,5 @@
 import "./cart.css";
 import "./home.css";
-import { goods } from "../service";
 import { Header } from "../components/header/header";
 import { createElement } from "../service";
 import { IGood } from "../interface/good";
@@ -24,6 +23,7 @@ class CartGood {
   private itemPlus;
   private itemMinus;
   private observer: CartObserver;
+  private cartUsage: Cart;
 
   constructor(chosenItem: IGood, index: number, observer: CartObserver) {
     this.chosenItem = chosenItem;
@@ -40,6 +40,7 @@ class CartGood {
     this.itemPlus = createElement(Tags.button, "item__amount-plus");
     this.itemMinus = createElement(Tags.button, "item__amount-minus");
     this.observer = observer;
+    this.cartUsage = new Cart();
   }
 
   private append() {
@@ -65,6 +66,8 @@ class CartGood {
 
   private decreaseAmount = () => {
     this.observer.decrease(this.chosenItem.id);
+    this.cartUsage.renewCurrent();
+    this.cartUsage.updateRender();
     Header.getInstance().clearUpdateIcon();
   };
 
@@ -77,7 +80,6 @@ class CartGood {
 
 export class Cart {
   body;
-  private cartItems: Array<IGood> | [];
   private observer: CartObserver;
   private productsField;
   private products: Array<CartGood> = [];
@@ -85,6 +87,12 @@ export class Cart {
   private summarySum;
   private urlHandler;
   private pageLimitAmount: HTMLInputElement;
+
+  private pageNumberAmount: HTMLDivElement;
+  private pagesArr: number[];
+  private currentPage;
+  private cartPagesLength: number;
+
   constructor() {
     this.body = document.querySelector("body") as HTMLElement;
     this.productsField = createElement(Tags.div, "products__field") as HTMLDivElement;
@@ -93,30 +101,47 @@ export class Cart {
     this.observer = new CartObserver();
     this.urlHandler = new UrlHandler();
     this.pageLimitAmount = createElement(Tags.input, "page-limit__amount") as HTMLInputElement;
+    this.pageNumberAmount = createElement(Tags.div, "page-number__amount") as HTMLDivElement;
     this.observer.subscribe(this);
-    this.cartItems = this.observer.state
-      ? Array.from(Object.keys(this.observer.state)).map((id) => {
-          const good = goods.products.find((good) => good.id === Number(id)) as IGood;
-          return { ...good, volume: this.observer.state[id] };
-        })
-      : [];
+    this.pagesArr = [];
+    this.currentPage = localStorage.getItem("page") ? localStorage.getItem("page") : "1";
+    this.pageLimitAmount.value = String(localStorage.getItem("limit")) ? String(localStorage.getItem("limit")) : "3";
+    this.cartPagesLength =
+      this.observer.setState() !== null ? Math.floor(Object.keys(this.observer.state).length / +this.pageLimitAmount.value) : 0;
   }
+
   append(...node: Array<HTMLElement>) {
     this.body.append(...node);
   }
 
-  updateRender(data = this.cartItems) {
+  updateRender(data = this.observer.setState()) {
     this.clear();
-    data.forEach((el, index) => {
-      if (index < +this.pageLimitAmount.value) {
-        const productsItem = new CartGood(el, index + 1, this.observer);
-        this.products.push(productsItem);
-        this.productsField.append(productsItem.render());
+    console.log(this.currentPage);
+    this.productsField.classList.remove(".products__field-empty");
+    if (data !== null) {
+      for (let i = 1; i < this.cartPagesLength; i++) {
+        this.pagesArr.push(i);
       }
-    });
-    const fullPrice = (data as Array<IGood>).reduce((priv, { price, volume }) => priv + price * (volume as number), 0);
-    const fullAmount = (data as Array<IGood>).reduce((priv, { volume }) => priv + (volume as number), 0);
-    this.setPrise(fullAmount, fullPrice);
+      this.pageNumberAmount.textContent = String(this.currentPage);
+      data.forEach((el, index) => {
+        if (this.currentPage) {
+          const borderNumber = +this.pageLimitAmount.value * +this.currentPage;
+          if (index < borderNumber && index > borderNumber - (+this.pageLimitAmount.value + 1)) {
+            const productsItem = new CartGood(el, index + 1, this.observer);
+            this.products.push(productsItem);
+            this.productsField.append(productsItem.render());
+            this.cartPagesLength =
+              this.observer.setState() !== null ? Math.ceil(Object.keys(this.observer.state).length / +this.pageLimitAmount.value) : 0;
+          }
+        }
+      });
+      const fullPrice = (data as Array<IGood>).reduce((priv, { price, volume }) => priv + price * (volume as number), 0);
+      const fullAmount = (data as Array<IGood>).reduce((priv, { volume }) => priv + (volume as number), 0);
+      this.setPrise(fullAmount, fullPrice);
+    } else {
+      this.productsField.innerHTML = "NO GOODS IN THE CART";
+      this.productsField.classList.add("products__field-empty");
+    }
   }
 
   private setPrise(count: number, price: number) {
@@ -140,15 +165,46 @@ export class Cart {
     this.pageLimitAmount.type = "number";
     this.pageLimitAmount.min = "0";
     this.pageLimitAmount.max = "5";
-    this.pageLimitAmount.value = String(localStorage.getItem("page")) ? String(localStorage.getItem("page")) : "3";
-    localStorage.setItem("page", this.pageLimitAmount.value);
-    this.pageLimitAmount.addEventListener("change", function () {
-      localStorage.setItem("page", this.value);
-      yyy.updateRender();
-    });
+    localStorage.setItem("limit", this.pageLimitAmount.value);
+    this.pageLimitAmount.addEventListener(
+      "input",
+      (() => {
+        this.inputFunction();
+      }).bind(this)
+    );
     const pageNumber = createElement(Tags.div, "products__page-number");
     const pageNumberName = createElement(Tags.p, "page-number__name", "Page");
     const pageNumberContent = createElement(Tags.div, "page-number__content");
+    const pageNumberLeft = createElement(Tags.button, "page-number__left");
+    const moveLeft = () => {
+      if (this.currentPage && this.currentPage !== "1") {
+        this.currentPage = String(+this.currentPage - 1);
+        this.pageNumberAmount.textContent = this.currentPage;
+        localStorage.setItem("page", this.currentPage);
+        this.updateRender();
+        pageNumberRight.removeAttribute("disabled");
+      } else {
+        pageNumberLeft.setAttribute("disabled", "true");
+      }
+    };
+    pageNumberLeft.addEventListener("click", moveLeft);
+    const pageNumberRight = createElement(Tags.button, "page-number__right");
+    const moveRight = () => {
+      if (this.currentPage && +this.currentPage < this.cartPagesLength) {
+        this.currentPage = String(+this.currentPage + 1);
+        this.pageNumberAmount.textContent = this.currentPage;
+        localStorage.setItem("page", this.currentPage);
+        this.updateRender();
+        pageNumberLeft.removeAttribute("disabled");
+      } else {
+        pageNumberRight.setAttribute("disabled", "true");
+      }
+    };
+    pageNumberRight.addEventListener("click", moveRight);
+    if (this.pageNumberAmount.textContent === "1") {
+      pageNumberLeft.setAttribute("disabled", "true");
+    }
+
     const summaryHeader = createElement(Tags.p, "summary__header", "Summary");
     const summaryField = createElement(Tags.div, "summary__field");
     const buyButton = createElement(Tags.button, "buy__button", "BUY NOW") as HTMLButtonElement;
@@ -170,6 +226,8 @@ export class Cart {
     pageLimit.append(pageLimitName, pageLimitContent);
     pageLimitContent.append(this.pageLimitAmount);
     pageNumber.append(pageNumberName, pageNumberContent);
+
+    pageNumberContent.append(pageNumberLeft, this.pageNumberAmount, pageNumberRight);
     products.append(productsHeader, this.productsField);
     this.updateRender();
 
@@ -180,7 +238,26 @@ export class Cart {
 
     summaryField.append(this.summaryProducts, this.summarySum, inputPromo, buyButton);
   }
+
+  pagesLengthUpdate() {
+    this.cartPagesLength =
+      this.observer.setState() !== null ? Math.floor(Object.keys(this.observer.state).length / +this.pageLimitAmount.value) : 0;
+  }
+
+  renewCurrent() {
+    if (this.currentPage) {
+      this.currentPage = String(+this.currentPage - 1);
+      localStorage.setItem("page", this.currentPage);
+    }
+  }
+
+  inputFunction() {
+    localStorage.setItem("limit", this.pageLimitAmount.value);
+    this.pagesLengthUpdate();
+    this.updateRender();
+  }
 }
 
-const yyy = new Cart();
+
+//const yyy = new Cart();
 //yyy.construct();

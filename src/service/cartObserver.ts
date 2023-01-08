@@ -5,10 +5,12 @@ import { goods } from "./goods";
 
 export class CartObserver {
   state: { [key: string]: number } = {}; // здесь будем хранить состояние корзины
+  //count: number;
   private subscribers: GoodList | Cart | null = null; // корзина и блок товаров - это разные страницы, соответственно мы не никогда не сможем здесь иметь
   // одновременно 2 класса , либо один, либо другой, приоткрытии каждой страницы каждый раз здесь будет новый обьект
   constructor() {
     this.state = JSON.parse(localStorage.getItem("item") as string) as { [key: string]: number };
+    //this.count = localStorage.getItem("page") as string;
     console.log(this.state);
   }
 
@@ -37,15 +39,21 @@ export class CartObserver {
     this.notify();
   }
 
+  public setState() {
+    if (this.state !== null) {
+      return Array.from(Object.keys(this.state)).map((id) => {
+        const good = goods.products.find((good) => good.id === Number(id)) as IGood;
+        return { ...good, volume: this.state[id] };
+      });
+    }
+    return null;
+  }
+
   public notify() {
     console.log(this.state);
     localStorage.setItem("item", JSON.stringify(this.state));
-    const renderArr = Array.from(Object.keys(this.state)).map((id) => {
-      const good = goods.products.find((good) => good.id === Number(id)) as IGood;
-      return { ...good, volume: this.state[id] };
-    });
-    console.log(this.subscribers instanceof GoodList, renderArr);
+    console.log(this.subscribers instanceof GoodList, this.setState());
     if (this.subscribers instanceof GoodList) this.subscribers.updateRender();
-    else this.subscribers?.updateRender(renderArr);
+    else this.subscribers?.updateRender(this.setState());
   }
 }
