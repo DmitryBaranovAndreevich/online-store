@@ -87,10 +87,12 @@ export class Cart {
   private summarySum;
   private urlHandler;
   private pageLimitAmount: HTMLInputElement;
+
   private pageNumberAmount: HTMLDivElement;
   private pagesArr: number[];
   private currentPage;
   private cartPagesLength: number;
+
   constructor() {
     this.body = document.querySelector("body") as HTMLElement;
     this.productsField = createElement(Tags.div, "products__field") as HTMLDivElement;
@@ -202,6 +204,7 @@ export class Cart {
     if (this.pageNumberAmount.textContent === "1") {
       pageNumberLeft.setAttribute("disabled", "true");
     }
+
     const summaryHeader = createElement(Tags.p, "summary__header", "Summary");
     const summaryField = createElement(Tags.div, "summary__field");
     const buyButton = createElement(Tags.button, "buy__button", "BUY NOW") as HTMLButtonElement;
@@ -223,6 +226,7 @@ export class Cart {
     pageLimit.append(pageLimitName, pageLimitContent);
     pageLimitContent.append(this.pageLimitAmount);
     pageNumber.append(pageNumberName, pageNumberContent);
+
     pageNumberContent.append(pageNumberLeft, this.pageNumberAmount, pageNumberRight);
     products.append(productsHeader, this.productsField);
     this.updateRender();
@@ -253,6 +257,7 @@ export class Cart {
     this.updateRender();
   }
 }
+
 
 //const yyy = new Cart();
 //yyy.construct();
