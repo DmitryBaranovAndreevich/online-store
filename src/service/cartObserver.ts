@@ -35,6 +35,16 @@ export class CartObserver {
     this.notify();
   }
 
+  public setState() {
+    if (this.state !== null) {
+      return Array.from(Object.keys(this.state)).map((id) => {
+        const good = goods.products.find((good) => good.id === Number(id)) as IGood;
+        return { ...good, volume: this.state[id] };
+      });
+    }
+    return null;
+  }
+
   public notify() {
     localStorage.setItem("item", JSON.stringify(this.state));
     this.subscribers?.updateRender();

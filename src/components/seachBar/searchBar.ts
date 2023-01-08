@@ -33,7 +33,7 @@ export class SearchBar implements IComponent {
   };
 
   private addListeners() {
-    this.container.addEventListener("submit", (e) => e.preventDefault());
+    this.container.addEventListener("submit", this.handelClick);
     this.input.addEventListener("input", this.handelClick);
   }
 
