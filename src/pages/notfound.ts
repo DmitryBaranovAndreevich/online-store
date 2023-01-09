@@ -25,5 +25,5 @@ export class NotFound {
   }
 }
 
-const rrr = new NotFound();
-rrr.errorState();
+//const rrr = new NotFound();
+//rrr.errorState();

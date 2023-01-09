@@ -142,9 +142,13 @@ export class Cart {
     this.discount = localStorage.getItem("discount") ? localStorage.getItem("discount") : "1";
     this.appliedCodes.classList.remove("applied__codes__display");
     this.summarySum.classList.remove("summary__sum-crossed");
+    this.currentPage = localStorage.getItem("page") !== null ? localStorage.getItem("page") : "1";
+    this.cartPagesLength =
+      this.observer.setState() !== null ? Math.floor(Object.keys(this.observer.state).length / +this.pageLimitAmount.value) : 0;
+    console.log(this.currentPage);
+    console.log(this.cartPagesLength);
     this.summarySumDiscount.textContent = "";
     this.clear();
-    console.log(this.currentPage);
     this.productsField.classList.remove(".products__field-empty");
     if (data !== null) {
       for (let i = 1; i < this.cartPagesLength; i++) {
@@ -342,11 +346,14 @@ export class Cart {
   }
 
   renewCurrent() {
-    if (this.currentPage && +this.currentPage >= 1) {
+    if (this.currentPage && +this.currentPage > 1) {
       this.currentPage = String(+this.currentPage - 1);
-      if (+this.currentPage !== 0) {
-        localStorage.setItem("page", this.currentPage);
-      }
+      localStorage.setItem("page", this.currentPage);
+    }
+    if (this.currentPage && +this.currentPage !== 0) {
+      localStorage.setItem("page", this.currentPage);
+    }
+    if (this.currentPage && +this.currentPage <= 1) {
       this.currentPage = null;
       this.productsField.innerHTML = "NO GOODS IN THE CART";
       this.productsField.classList.add("products__field-empty");
@@ -389,5 +396,5 @@ export class Cart {
   }
 }
 
-const yyy = new Cart();
-yyy.construct();
+//const yyy = new Cart();
+//yyy.construct();

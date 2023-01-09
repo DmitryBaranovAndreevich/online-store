@@ -157,5 +157,5 @@ export class GoodsCart {
   }
 }
 
-const Good = new GoodsCart();
-Good.fill();
+//const Good = new GoodsCart();
+//Good.fill();

@@ -47,5 +47,5 @@ export class MainPage implements IPage {
   }
 }
 
-const jjj = new MainPage();
-jjj.render();
+//const jjj = new MainPage();
+//jjj.render();
