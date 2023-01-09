@@ -86,6 +86,15 @@ export class Cart {
   private products: Array<CartGood> = [];
   private summaryProducts;
   private summarySum;
+  private summarySumDiscount;
+  private appliedCodes: HTMLDivElement;
+  private codesHeader: HTMLDivElement;
+  private codesItemDima: HTMLDivElement;
+  private codesItemTema: HTMLDivElement;
+  private codesContentDima: HTMLDivElement;
+  private codesContentTema: HTMLDivElement;
+  private codesDropDima: HTMLDivElement;
+  private codesDropTema: HTMLDivElement;
   private urlHandler;
   private pageLimitAmount: HTMLInputElement;
 
@@ -94,11 +103,15 @@ export class Cart {
   private currentPage;
   private cartPagesLength: number;
 
+  private inputPromo: HTMLInputElement;
+  private discount: string | null;
+
   constructor() {
     this.body = document.querySelector("body") as HTMLElement;
     this.productsField = createElement(Tags.div, "products__field") as HTMLDivElement;
     this.summaryProducts = createElement(Tags.p, "summary__products", "Products: 0");
     this.summarySum = createElement(Tags.p, "summary__sum", "Total sum: 0");
+    this.summarySumDiscount = createElement(Tags.p, "summary__sum-discount");
     this.observer = new CartObserver();
     this.urlHandler = new UrlHandler();
     this.pageLimitAmount = createElement(Tags.input, "page-limit__amount") as HTMLInputElement;
@@ -109,6 +122,16 @@ export class Cart {
     this.pageLimitAmount.value = String(localStorage.getItem("limit")) ? String(localStorage.getItem("limit")) : "3";
     this.cartPagesLength =
       this.observer.setState() !== null ? Math.floor(Object.keys(this.observer.state).length / +this.pageLimitAmount.value) : 0;
+    this.inputPromo = createElement(Tags.input, "input__promo") as HTMLInputElement;
+    this.discount = localStorage.getItem("discount") ? localStorage.getItem("discount") : "1";
+    this.appliedCodes = createElement(Tags.div, "applied__codes") as HTMLDivElement;
+    this.codesHeader = createElement(Tags.div, "codes__header") as HTMLDivElement;
+    this.codesItemDima = createElement(Tags.div, "codes__item-dima") as HTMLDivElement;
+    this.codesItemTema = createElement(Tags.div, "codes__item-tema") as HTMLDivElement;
+    this.codesContentDima = createElement(Tags.div, "codes__content") as HTMLDivElement;
+    this.codesContentTema = createElement(Tags.div, "codes__content") as HTMLDivElement;
+    this.codesDropDima = createElement(Tags.div, "codes__drop") as HTMLDivElement;
+    this.codesDropTema = createElement(Tags.div, "codes__drop") as HTMLDivElement;
   }
 
   append(...node: Array<HTMLElement>) {
@@ -116,6 +139,10 @@ export class Cart {
   }
 
   updateRender(data = this.observer.setState()) {
+    this.discount = localStorage.getItem("discount") ? localStorage.getItem("discount") : "1";
+    this.appliedCodes.classList.remove("applied__codes__display");
+    this.summarySum.classList.remove("summary__sum-crossed");
+    this.summarySumDiscount.textContent = "";
     this.clear();
     console.log(this.currentPage);
     this.productsField.classList.remove(".products__field-empty");
@@ -136,8 +163,28 @@ export class Cart {
           }
         }
       });
+      this.appliedCodes.append(this.codesHeader);
+      this.codesHeader.textContent = "Applied codes";
       const fullPrice = (data as Array<IGood>).reduce((priv, { price, volume }) => priv + price * (volume as number), 0);
       const fullAmount = (data as Array<IGood>).reduce((priv, { volume }) => priv + (volume as number), 0);
+      if (this.discount && this.discount !== "0" && this.discount !== "1") {
+        const discountPrice = Math.round(fullPrice * (1 - +this.discount / 100));
+        this.summarySum.classList.add("summary__sum-crossed");
+        this.summarySumDiscount.textContent = `Total sum: ${discountPrice}`;
+        if (this.discount === "10") {
+          this.appliedCodes.classList.add("applied__codes__display");
+          this.addDima();
+        }
+        if (this.discount === "5") {
+          this.appliedCodes.classList.add("applied__codes__display");
+          this.addTema();
+        }
+        if (this.discount === "15") {
+          this.appliedCodes.classList.add("applied__codes__display");
+          this.addDima();
+          this.addTema();
+        }
+      }
       this.setPrise(fullAmount, fullPrice);
     } else {
       this.productsField.innerHTML = "NO GOODS IN THE CART";
@@ -241,10 +288,52 @@ export class Cart {
 
     summary.append(summaryHeader, summaryField);
 
-    const inputPromo: HTMLInputElement = createElement(Tags.input, "input__promo") as HTMLInputElement;
-    inputPromo.placeholder = "Enter promo code";
+    this.inputPromo.placeholder = "Enter promo code";
+    this.inputPromo.type = "text";
+    this.inputPromo.addEventListener("keydown", ({ key }) => {
+      if (this.inputPromo.value === "dima" && key === "Enter" && this.discount !== "5") {
+        localStorage.setItem("discount", "10");
+        this.summarySum.classList.add("summary__sum-crossed");
+      } else if (this.inputPromo.value === "dima" && key === "Enter" && this.discount === "5") {
+        localStorage.setItem("discount", `${+this.discount + 10}`);
+        this.summarySum.classList.add("summary__sum-crossed");
+      } else if (this.inputPromo.value === "tema" && key === "Enter" && this.discount !== "10") {
+        localStorage.setItem("discount", "5");
+        this.summarySum.classList.add("summary__sum-crossed");
+      } else if (this.inputPromo.value === "tema" && key === "Enter" && this.discount === "10") {
+        localStorage.setItem("discount", `${+this.discount + 5}`);
+        this.summarySum.classList.add("summary__sum-crossed");
+      }
+      this.updateRender();
+    });
 
-    summaryField.append(this.summaryProducts, this.summarySum, inputPromo, buyButton);
+    this.codesDropDima.addEventListener("click", () => {
+      if (this.discount) {
+        this.discount = String(+this.discount - 10);
+        localStorage.setItem("discount", this.discount);
+      }
+      this.appliedCodes.removeChild(this.codesItemDima);
+      this.updateRender();
+    });
+    this.codesDropTema.addEventListener("click", () => {
+      if (this.discount) {
+        this.discount = String(+this.discount - 5);
+        localStorage.setItem("discount", this.discount);
+      }
+      this.appliedCodes.removeChild(this.codesItemTema);
+      this.updateRender();
+    });
+    const offerPromo: HTMLElement = createElement(Tags.div, "offer__promo", "Promo for test: 'dima', 'tema'.");
+
+    summaryField.append(
+      this.summaryProducts,
+      this.summarySum,
+      this.summarySumDiscount,
+      this.appliedCodes,
+      this.inputPromo,
+      offerPromo,
+      buyButton
+    );
   }
 
   pagesLengthUpdate() {
@@ -273,6 +362,30 @@ export class Cart {
     localStorage.setItem("limit", this.pageLimitAmount.value);
     this.pagesLengthUpdate();
     this.updateRender();
+  }
+
+  setDiscount() {
+    if (this.inputPromo.value === "dima") {
+      let disc = document.querySelector(".summary__sum")?.textContent?.slice(11);
+      if (disc !== undefined) {
+        disc = String(+disc * 0.9);
+        return disc;
+      }
+    }
+  }
+
+  addDima() {
+    this.codesItemDima.append(this.codesContentDima, this.codesDropDima);
+    this.codesItemDima.children[0].textContent = "dima - 10%";
+    this.codesItemDima.children[1].textContent = "DROP";
+    this.appliedCodes.append(this.codesItemDima);
+  }
+
+  addTema() {
+    this.codesItemTema.append(this.codesContentTema, this.codesDropTema);
+    this.codesItemTema.children[0].textContent = "tema - 5%";
+    this.codesItemTema.children[1].textContent = "DROP";
+    this.appliedCodes.append(this.codesItemTema);
   }
 }
 
