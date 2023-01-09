@@ -1,6 +1,7 @@
 import "./cart.css";
 import "./home.css";
 import { Header } from "../components/header/header";
+import { Footer } from "../components/footer/footer";
 import { createElement } from "../service";
 import { IGood } from "../interface/good";
 import { CartObserver } from "../service/cartObserver";
@@ -222,7 +223,7 @@ export class Cart {
     });
 
     popup.render();
-    this.append(Header.getInstance().render(), cartMain);
+    this.append(Header.getInstance().render(), cartMain, Footer.getInstanceFooter().footerRender());
 
     const products = createElement(Tags.section, "products");
     const summary = createElement(Tags.section, "summary");
