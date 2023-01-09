@@ -4,18 +4,15 @@ import { Cart } from "../pages/cart";
 import { goods } from "./goods";
 
 export class CartObserver {
-  state: { [key: string]: number } = {}; // здесь будем хранить состояние корзины
-  //count: number;
-  private subscribers: GoodList | Cart | null = null; // корзина и блок товаров - это разные страницы, соответственно мы не никогда не сможем здесь иметь
-  // одновременно 2 класса , либо один, либо другой, приоткрытии каждой страницы каждый раз здесь будет новый обьект
+  state: { [key: string]: number } = {};
+
+  private subscribers: GoodList | Cart | null = null;
+
   constructor() {
     this.state = JSON.parse(localStorage.getItem("item") as string) as { [key: string]: number };
-    //this.count = localStorage.getItem("page") as string;
-    console.log(this.state);
   }
 
   public subscribe(obj: GoodList | Cart) {
-    // в конструкторе каждого класса нужно будет добавить
     this.subscribers = obj;
   }
 
@@ -30,7 +27,6 @@ export class CartObserver {
   }
 
   public decrease(id: number) {
-    console.log("tets");
     if (this.state[id] === 1) {
       delete this.state[id];
     } else {
@@ -50,10 +46,7 @@ export class CartObserver {
   }
 
   public notify() {
-    console.log(this.state);
     localStorage.setItem("item", JSON.stringify(this.state));
-    console.log(this.subscribers instanceof GoodList, this.setState());
-    if (this.subscribers instanceof GoodList) this.subscribers.updateRender();
-    else this.subscribers?.updateRender(this.setState());
+    this.subscribers?.updateRender();
   }
 }

@@ -145,8 +145,6 @@ export class Cart {
     this.currentPage = localStorage.getItem("page") !== null ? localStorage.getItem("page") : "1";
     this.cartPagesLength =
       this.observer.setState() !== null ? Math.floor(Object.keys(this.observer.state).length / +this.pageLimitAmount.value) : 0;
-    console.log(this.currentPage);
-    console.log(this.cartPagesLength);
     this.summarySumDiscount.textContent = "";
     this.clear();
     this.productsField.classList.remove(".products__field-empty");

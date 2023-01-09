@@ -57,7 +57,9 @@ export class SliderFilter {
   }
 
   public updateText(data: Array<IGood>) {
-    this.count = data.filter((el) => el[this.englishName] >= this.min && el[this.englishName] < this.max).length;
+    this.count = data.filter(
+      (el) => (el[this.englishName] as number) >= Number(this.min) && (el[this.englishName] as number) < Number(this.max)
+    ).length;
     this.setResults();
   }
 
