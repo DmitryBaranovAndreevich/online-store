@@ -68,7 +68,7 @@
 .page-limit__content {
     display: flex;
     width: 100%;
-    height: 70%;
+    height: 62%;
 }
 
 .page-limit__amount {
@@ -285,22 +285,107 @@
 }
 
 .summary__products {
+    display: flex;
+    justify-content: center;
+    align-items: center;
     text-align: center;
     width: 100%;
-    height: 20%;
+    height: 15%;
     font-size: 24px;
+    margin: 0 auto;
 }
 
 .summary__sum {
+    display: flex;
+    justify-content: center;
+    align-items: center;
     text-align: center;
     width: 100%;
-    height: 20%;
+    height: 15%;
     font-size: 24px;
+    margin: 0 auto;
+}
+
+.summary__sum-discount {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    width: 100%;
+    height: 10%;
+    font-size: 24px;
+    margin: 0 auto;
+}
+
+.summary__sum-crossed {
+    text-decoration: line-through;
+}
+
+.applied__codes {
+    display: none;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    text-align: center;
+    font-size: 16px;
+    width: 80%;
+    height: 15%;
+    border:#2CB708 2px solid;
+    border-radius: 16px;
+}
+
+.applied__codes__display {
+    display: flex;
+}
+
+.codes__header {
+    width: 100%;
+    height: 30%;
+}
+
+.codes__item-dima {
+    display: flex;
+    width: 100%;
+    height: 30;
+    border:black 1px solid;
+    border-radius: 16px;
+}
+
+.codes__item-tema {
+    display: flex;
+    width: 100%;
+    height: 30%;
+    border:black 1px solid;
+    border-radius: 16px;
+}
+
+.codes__content {
+    width: 70%;
+    height: 100%;
+}
+
+.codes__drop {
+    width: 30%;
+    height: 100%;
+    cursor: pointer;
 }
 
 .input__promo {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
     width: 80%;
     height: 10%;
+}
+
+.offer__promo {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    width: 80%;
+    height: 6%;
 }
 
 .input__promo::placeholder {

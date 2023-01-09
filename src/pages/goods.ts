@@ -3,6 +3,7 @@ import "./home.css";
 import { goods } from "../service";
 import { IGood } from "../interface/good";
 import { Header } from "../components/header/header";
+import { Footer } from "../components/footer/footer";
 import { createElement } from "../service";
 import { UrlHandler } from "../service/urlHandler";
 import { Tags } from "../interface/tags";
@@ -31,6 +32,7 @@ export class GoodsCart {
     this.append(Header.getInstance().render());
     const main: HTMLElement = createElement(Tags.div, "main");
     this.append(main);
+    this.append(Footer.getInstanceFooter().footerRender());
     const goodsWay: HTMLElement = createElement(Tags.section, "goods__way");
 
     for (let i = 0; i < 7; i++) {
@@ -154,3 +156,6 @@ export class GoodsCart {
     this.chartButton.addEventListener("click", this.goodToCart);
   }
 }
+
+//const Good = new GoodsCart();
+//Good.fill();

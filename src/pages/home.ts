@@ -1,5 +1,6 @@
 import "./home.css";
 import { Header } from "../components/header/header";
+import { Footer } from "../components/footer/footer";
 import { ImageLink } from "../components/imageLink/imageLink";
 import { IPage } from "../interface/iPage";
 import { Filters } from "../components/filters/filters";
@@ -31,6 +32,7 @@ export class MainPage implements IPage {
     const diskountBanner = new ImageLink(diskountBanerImage as string, "home__diskountBanner", "#");
     const filter = new Filters(testArr).render();
     const header = Header.getInstance().render();
+    const footer = Footer.getInstanceFooter().footerRender();
     const goodsList = GoodList.getInstance();
     const sortSection = new SortSection();
     const wrapper = createElement(Tags.div, "home__goods-wrapper");
@@ -39,10 +41,11 @@ export class MainPage implements IPage {
     diskountBanner.render(this.body); // добавляем банер со скидками
     const mainContent = createElement(Tags.div, "home__main-content");
     this.append(mainContent);
+    this.append(footer);
     mainContent.append(filter, wrapper); // добавляем блок с фильтрами
     if (this.urlHandler.isParams()) SortElements.getInstance().sort();
   }
 }
 
-const jjj = new MainPage();
-jjj.render();
+//const jjj = new MainPage();
+//jjj.render();

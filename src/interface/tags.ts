@@ -10,4 +10,5 @@ export enum Tags {
   h1 = "h1",
   span = "span",
   form = "form",
+  footer = "footer",
 }
