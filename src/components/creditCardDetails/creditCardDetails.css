@@ -1,0 +1,80 @@
+.credit-card {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  margin: 20px 0 40px;
+}
+
+.credit-card__title {
+  margin: 0;
+  font-size: 20px;
+  text-align: center;
+}
+
+.credit-card__wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+  box-sizing: border-box;
+  padding: 40px 20px;
+  max-width: 400px;
+  width: 150%;
+  border-radius: 16px;
+  background: rgb(127, 182, 45);
+}
+
+.credit-card__icon {
+  --img: url("../../images/bank/maestro.png");
+  width: 50px;
+  height: 30px;
+  border-radius: 10px;
+  display: block;
+  background: var(--img) no-repeat center/cover;
+}
+
+.credit-card__container {
+  display: flex;
+  gap: 10px;
+  justify-content: space-between;
+}
+
+.credit-card__container .form-element__label {
+  max-width: 60px;
+}
+
+.credit-card__container2 {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 10px;
+}
+
+.credit-card__container2 .form-element {
+  margin-bottom: 0;
+  max-width: 50px;
+}
+
+.credit-card__container2 .form-element:first-child {
+  max-width: 160px;
+}
+
+.credit-card__container2 .form-element:first-child .form-element__label {
+  max-width: 100px;
+}
+
+.credit-card__container2 .form-element:last-child .form-element__label {
+  max-width: 10px;
+}
+
+.credit-card__container2 .form-element:last-child {
+  max-width: 70px;
+}
+
+.credit-card__wrapper > .form-element {
+  max-width: 100px;
+}
+.credit-card__wrapper > .form-element .form-element__label {
+  max-width: 40px;
+}
