@@ -1,0 +1,46 @@
+:root {
+  --shadow: 0 0 4px hsl(225deg 9% 91% / 60%), 0 4px 16px hsl(225deg 9% 91% / 60%);
+}
+
+.popup__message {
+  display: none;
+  font-size: 32px;
+  background: green;
+  padding: 20px;
+  position: absolute;
+  color: #fff;
+  top: 40%;
+  left: 40%;
+}
+
+.popup__message_visible {
+  display: inline-block;
+}
+
+.popup-background {
+  position: absolute;
+  display: none;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.2);
+}
+
+.popup-background_active {
+  display: flex;
+}
+
+.popup__button {
+  font-size: 16px;
+  border: none;
+  padding: 5px 100px;
+  border-radius: 10px;
+  background-color: aquamarine;
+  transition: 0.2s;
+}
+
+.popup__button:hover {
+  cursor: pointer;
+  opacity: 0.7;
+}

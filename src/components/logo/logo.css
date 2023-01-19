@@ -1,0 +1,10 @@
+.logo {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.logo_size_default {
+  max-width:  190px;
+  max-height: 70px;
+}
